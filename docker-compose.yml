@@ -1,0 +1,62 @@
+services:
+  billbatch:
+    container_name: billbatch
+    build:
+      context: .
+      dockerfile: Dockerfile
+      args:
+        UID: ${UID:-1000}
+        GID: ${GID:-1000}
+    user: "${UID:-1000}:${GID:-1000}"
+    restart: always
+    networks:
+      - proxy
+      - rede_interna
+    env_file: 
+      - .env
+    ports:
+      - 8080:80
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      mysql:
+        condition: service_healthy
+    command: >
+      sh -c "rm -f public/storage &&
+             php artisan storage:link &&
+             php artisan migrate --force &&
+             php artisan queue:work --daemon &
+             apache2-foreground"
+
+  # --- MySQL for boletoprocessor -----------------------------
+  mysql:
+    container_name: mysql
+    image: mysql:8.0
+    restart: always
+    env_file: .env
+    environment:
+      - MYSQL_USER=${DB_USER}
+      - MYSQL_PASSWORD=${DB_PASSWORD}
+      - MYSQL_DATABASE=${DB_NAME} 
+      - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
+    ports:
+      - "3306:3306"
+    volumes:
+      - /srv/data:/var/lib/mysql
+    networks:
+      - rede_interna
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 5s
+      timeout: 10s
+      retries: 5
+
+# ------------------------------------------------------------
+volumes:
+  mysql_data:
+
+networks:
+  rede_interna:
+    driver: bridge
+  proxy:
+    driver: bridge
