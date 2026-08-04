@@ -58,5 +58,6 @@ COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 ARG UID=1000
 ARG GID=1000
 RUN usermod -u ${UID} www-data && groupmod -g ${GID} www-data
+USER www-data
 
 EXPOSE 80
