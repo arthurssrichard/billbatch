@@ -43,16 +43,7 @@ RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-av
 
 # Instala Composer
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
-
-# RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
-# RUN npm ci
-
-# RUN composer dump-autoload --optimize --classmaap-authoritative \
-#     && composer run-script post-autoload-dump
-
-# RUN npm run build \
-#     && npm prune --production \
-#     && npm cache clean --force
+ENV NPM_CONFIG_CACHE=/var/www/html/.npm-cache
 
 # Define usuários
 ARG UID=1000
