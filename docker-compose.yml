@@ -28,7 +28,6 @@ services:
              php artisan queue:work --daemon &
              apache2-foreground"
 
-  # --- MySQL for boletoprocessor -----------------------------
   mysql:
     container_name: mysql
     image: mysql:8.0
@@ -49,6 +48,21 @@ services:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 5s
       timeout: 10s
+      retries: 5
+
+  redis:
+    container_name: redis
+    image: redis:8.10-alpine
+    volumes:
+      - /srv/data/redis:/data
+    networks:
+        - rede_interna
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD","redis-cli",'ping']
+      interval: 5s
+      timeout: 5s
       retries: 5
 
 # ------------------------------------------------------------
