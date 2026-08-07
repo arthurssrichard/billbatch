@@ -4,11 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        UID: ${UID:-1000}
-        GID: ${GID:-1000}
-    user: "${UID:-1000}:${GID:-1000}"
-    restart: always
+    restart: unless-stopped
     networks:
       - proxy
       - rede_interna
@@ -25,21 +21,18 @@ services:
       sh -c "rm -f public/storage &&
              php artisan storage:link &&
              php artisan migrate --force &&
-             php artisan queue:work --daemon &
              apache2-foreground"
 
   mysql:
     container_name: mysql
     image: mysql:8.0
-    restart: always
+    restart: unless-stopped
     env_file: .env
     environment:
       - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
       - MYSQL_DATABASE=${DB_DATABASE}
       - MYSQL_USER=${DB_USERNAME} 
       - MYSQL_PASSWORD=${DB_PASSWORD}
-    ports:
-      - "3306:3306"
     volumes:
       - /srv/data/mysql:/var/lib/mysql
     networks:
@@ -86,5 +79,6 @@ services:
 networks:
   rede_interna:
     driver: bridge
+    internal: true
   proxy:
     driver: bridge
