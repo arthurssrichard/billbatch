@@ -64,6 +64,22 @@ services:
       interval: 5s
       timeout: 5s
       retries: 5
+  
+  mailpit:
+    image: axllent/mailpit:v1.30.6
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    networks:
+      - proxy
+      - rede_interna
+    healthcheck:
+      test: ["CMD", "/mailpit","readyz"]
+      interval: 10s
+      timeout: 15s
+      retries: 5
+      start_period: 15s
+
 
 # ------------------------------------------------------------
 
