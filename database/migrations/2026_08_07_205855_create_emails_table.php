@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string("remetente_endereco");
             $table->string("remetente_senha");
             $table->string('smtp_servidor');
-            $table->string('smtp->secure');
+            $table->string('smtp_secure');
             $table->string('smtp_porta');
             $table->timestamps();
         });

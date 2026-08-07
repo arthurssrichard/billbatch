@@ -21,8 +21,8 @@ return new class extends Migration
             $table->string('codigo_barras');
             $table->string('grupo');
             $table->string('caminho_arquivo');
-            $table->bool('enviado')->default(false);
-            $table->bool('pago')->default(false);
+            $table->boolean('enviado')->default(false);
+            $table->boolean('pago')->default(false);
             $table->datetime('data_emissao');
             $table->timestamps();
         });
