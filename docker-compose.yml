@@ -20,8 +20,7 @@ services:
     command: >
       sh -c "rm -f public/storage &&
              php artisan storage:link &&
-             php artisan migrate --force &&
-             apache2-foreground"
+             php artisan migrate --force &&"
 
   mysql:
     container_name: mysql

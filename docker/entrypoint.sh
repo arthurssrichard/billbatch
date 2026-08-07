@@ -4,4 +4,4 @@ echo "DEBUG: Entrypoint started. Current directory: $(pwd)"
 composer install
 npm install
 
-exec "$@"
+exec apache2-foreground
