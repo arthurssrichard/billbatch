@@ -4,11 +4,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-      args:
-        UID: ${UID:-1000}
-        GID: ${GID:-1000}
-    user: "${UID:-1000}:${GID:-1000}"
-    restart: always
+    restart: unless-stopped
     networks:
       - proxy
       - rede_interna
@@ -25,24 +21,20 @@ services:
       sh -c "rm -f public/storage &&
              php artisan storage:link &&
              php artisan migrate --force &&
-             php artisan queue:work --daemon &
              apache2-foreground"
 
-  # --- MySQL for boletoprocessor -----------------------------
   mysql:
     container_name: mysql
     image: mysql:8.0
-    restart: always
+    restart: unless-stopped
     env_file: .env
     environment:
-      - MYSQL_USER=${DB_USER}
-      - MYSQL_PASSWORD=${DB_PASSWORD}
-      - MYSQL_DATABASE=${DB_NAME} 
       - MYSQL_ROOT_PASSWORD=${DB_ROOT_PASSWORD}
-    ports:
-      - "3306:3306"
+      - MYSQL_DATABASE=${DB_DATABASE}
+      - MYSQL_USER=${DB_USERNAME} 
+      - MYSQL_PASSWORD=${DB_PASSWORD}
     volumes:
-      - /srv/data:/var/lib/mysql
+      - /srv/data/mysql:/var/lib/mysql
     networks:
       - rede_interna
     healthcheck:
@@ -51,12 +43,42 @@ services:
       timeout: 10s
       retries: 5
 
+  redis:
+    container_name: redis
+    image: redis:8.10-alpine
+    volumes:
+      - /srv/data/redis:/data
+    networks:
+        - rede_interna
+    restart: unless-stopped
+    command: redis-server --appendonly yes
+    healthcheck:
+      test: ["CMD","redis-cli",'ping']
+      interval: 5s
+      timeout: 5s
+      retries: 5
+  
+  mailpit:
+    image: axllent/mailpit:v1.30.6
+    ports:
+      - "8025:8025"
+      - "1025:1025"
+    networks:
+      - proxy
+      - rede_interna
+    healthcheck:
+      test: ["CMD", "/mailpit","readyz"]
+      interval: 10s
+      timeout: 15s
+      retries: 5
+      start_period: 15s
+
+
 # ------------------------------------------------------------
-volumes:
-  mysql_data:
 
 networks:
   rede_interna:
     driver: bridge
+    internal: true
   proxy:
     driver: bridge

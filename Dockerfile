@@ -21,11 +21,10 @@ RUN apt-get update && apt-get install -y \
     ca-certificates \
     apt-transport-https \
     libkrb5-dev \
-    && curl -sL https://deb.nodesource.com/setup_18.x | bash - \
+    && curl -sL https://deb.nodesource.com/setup_22.x | bash - \
     && apt-get install -y nodejs \
     && apt-get clean \ 
     && rm -rf /var/lib/apt/lists/*
-
 
 # Instala extensões PHP 
 RUN docker-php-ext-install pdo_mysql zip gd pcntl \
@@ -40,23 +39,27 @@ ENV APACHE_DOCUMENT_ROOT=/var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf \
     && sed -ri -e 's!/var/www/!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-
 # Instala Composer
 COPY --from=composer:latest /usr/bin/composer /usr/local/bin/composer
 
-# RUN composer install --no-dev --no-scripts --no-autoloader --prefer-dist
-# RUN npm ci
-
-# RUN composer dump-autoload --optimize --classmaap-authoritative \
-#     && composer run-script post-autoload-dump
-
-# RUN npm run build \
-#     && npm prune --production \
-#     && npm cache clean --force
+# Muda pasta do npm-cache para dentro do projeto, afim de evitar conflitos de permissão
+ENV NPM_CONFIG_CACHE=/var/www/html/.npm-cache
 
 # Define usuários
 ARG UID=1000
 ARG GID=1000
 RUN usermod -u ${UID} www-data && groupmod -g ${GID} www-data
+
+# Cria entrypoint para instalação de dependências após build do container
+COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
+RUN chown www-data:www-data /usr/local/bin/entrypoint.sh
+RUN chmod +x /usr/local/bin/entrypoint.sh
+
+# Passa para o user www-data
+RUN chown -R www-data:www-data /var/www/html
+USER www-data
+
+# Entrypoint para composer install e npm install
+ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
 
 EXPOSE 80
