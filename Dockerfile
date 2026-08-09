@@ -55,6 +55,10 @@ COPY docker/entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chown www-data:www-data /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
 
+RUN mkdir -p /var/www/.config/psysh
+RUN chmod -R 775 /var/www/.config 
+RUN chown -R www-data:www-data /var/www/.config
+
 # Passa para o user www-data
 RUN chown -R www-data:www-data /var/www/html
 USER www-data
