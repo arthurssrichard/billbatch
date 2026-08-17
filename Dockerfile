@@ -12,6 +12,7 @@ RUN apt-get update && apt-get install -y \
     libjpeg-dev \
     libfreetype6-dev \
     libjpeg62-turbo-dev \
+    libsqlite3-dev \
     libpq-dev \ 
     libcurl4-openssl-dev \
     libssl-dev \
@@ -27,7 +28,7 @@ RUN apt-get update && apt-get install -y \
     && rm -rf /var/lib/apt/lists/*
 
 # Instala extensões PHP 
-RUN docker-php-ext-install pdo_mysql zip gd pcntl \
+RUN docker-php-ext-install pdo_mysql pdo_sqlite zip gd pcntl \
     && pecl install redis \
     && docker-php-ext-enable redis
 
