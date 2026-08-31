@@ -17,17 +17,17 @@ class Cliente extends Model
         ];
     }
 
-    protected function contatos(): HasMany
+    public function contatos(): HasMany
     {
         return $this->hasMany(Contato::class);
     }
 
-    protected function boletos(): HasMany
+    public function boletos(): HasMany
     {
         return $this->hasMany(Boleto::class);
     }
 
-    protected function empresa(): BelongsTo
+    public function empresa(): BelongsTo
     {
         return $this->belongsTO(Empresa::class);
     }
