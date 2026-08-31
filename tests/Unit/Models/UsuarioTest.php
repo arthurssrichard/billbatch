@@ -7,7 +7,7 @@ use Illuminate\Support\Str;
 test('usuario tem muitas empresas', function () {
     $usuario = Usuario::create([
         'nome' => 'Teste',
-        'uuid' => Str::uuid(), // pensa: que valor faz sentido aqui?
+        'uuid' => Str::uuid(),
         'ultima_atividade' => now(),
     ]);
 
@@ -22,7 +22,7 @@ test('usuario tem muitas empresas', function () {
 test('ultima atividade é convertida para datetime', function () {
     $usuario = Usuario::create([
         'nome' => 'Teste',
-        'uuid' => Str::uuid(), // pensa: que valor faz sentido aqui?
+        'uuid' => Str::uuid(),
         'ultima_atividade' => now(),
     ]);
 
