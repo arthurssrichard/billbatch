@@ -30,7 +30,7 @@ class Empresa extends Model
         return $this->hasMany(Boleto::class);
     }
 
-    public function modelosMensagemCobranca(): HasMany
+    public function modeloMensagemCobrancas(): HasMany
     {
         return $this->hasMany(ModeloMensagemCobranca::class);
     }
