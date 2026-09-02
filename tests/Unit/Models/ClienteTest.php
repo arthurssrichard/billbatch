@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Empresa;
 use App\Models\Usuario;
 use Illuminate\Support\Str;
 
@@ -11,8 +10,7 @@ test('canais_envio retorna um array', function () {
         'ultima_atividade' => now(),
     ]);
 
-    $empresa = Empresa::create([
-        'usuario_id' => $usuario->id,
+    $empresa = $usuario->empresas()->create([
         'nome' => 'Empresa Teste',
     ]);
 

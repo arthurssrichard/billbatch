@@ -10,10 +10,13 @@ class Cobranca extends Model
 {
     protected $fillable = ['canal_envio', 'contatos_enviados', 'tipo', 'data_envio'];
 
-    protected $casts = [
-        'canal_envio' => CanalCobranca::class,
-        'data_envio' => 'datetime',
-    ];
+    protected function casts(): array
+    {
+        return [
+            'canal_envio' => CanalCobranca::class,
+            'data_envio' => 'datetime',
+        ];
+    }
 
     public function boleto(): BelongsTo
     {

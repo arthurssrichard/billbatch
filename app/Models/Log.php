@@ -10,7 +10,7 @@ class Log extends Model
 {
     protected $fillable = ['status', 'arquivo_origem', 'nome', 'mensagem'];
 
-    protected function casts()
+    protected function casts(): array
     {
         return [
             'status' => LogStatus::class,

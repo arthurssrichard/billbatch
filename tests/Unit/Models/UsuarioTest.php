@@ -1,6 +1,5 @@
 <?php
 
-use App\Models\Empresa;
 use App\Models\Usuario;
 use Illuminate\Support\Str;
 
@@ -11,7 +10,7 @@ test('usuario tem muitas empresas', function () {
         'ultima_atividade' => now(),
     ]);
 
-    Empresa::create([
+    $usuario->empresas()->create([
         'usuario_id' => $usuario->id,
         'nome' => 'Empresa Teste',
     ]);
