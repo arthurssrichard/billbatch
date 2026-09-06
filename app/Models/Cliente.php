@@ -32,7 +32,7 @@ class Cliente extends Model
 
     public function empresa(): BelongsTo
     {
-        return $this->belongsTO(Empresa::class);
+        return $this->belongsTo(Empresa::class);
     }
 
 }
