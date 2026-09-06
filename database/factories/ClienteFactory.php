@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Contato;
 use App\Models\Cliente;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -10,6 +11,15 @@ use Illuminate\Database\Eloquent\Factories\Factory;
  */
 class ClienteFactory extends Factory
 {
+    public function configure(): static
+    {
+        return $this->afterCreating(function (Cliente $cliente) {
+            Contato::factory()->count(fake()->numberBetween(1, 5))->create([
+                'cliente_id' => $cliente->id,
+            ]);
+        });
+    }
+
     /**
      * Define the model's default state.
      *
