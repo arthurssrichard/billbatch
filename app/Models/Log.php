@@ -3,11 +3,14 @@
 namespace App\Models;
 
 use App\Enums\LogStatus;
+use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 
 class Log extends Model
 {
+    use HasFactory;
+
     protected $fillable = ['status', 'arquivo_origem', 'nome', 'mensagem'];
 
     protected function casts(): array

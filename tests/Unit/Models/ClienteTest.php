@@ -1,27 +1,16 @@
 <?php
 
-use App\Models\Usuario;
-use Illuminate\Support\Str;
+use App\Enums\CanalCobranca;
+use App\Models\Cliente;
 
 test('canais_envio retorna um array', function () {
-    $usuario = Usuario::create([
-        'nome' => 'Teste',
-        'uuid' => Str::uuid(),
-        'ultima_atividade' => now(),
-    ]);
+    $cliente = Cliente::factory()->create();
 
-    $empresa = $usuario->empresas()->create([
-        'nome' => 'Empresa Teste',
-    ]);
-
-    $cliente = $empresa->clientes()->create([
-        'nome' => 'Cliente teste',
-        'identificador_externo' => '135',
-        'cnpj' => '34.028.316/0001-03',
-        'canais_envio' => ['whatsapp', 'email'],
-    ]);
-
-    expect($cliente->canais_envio)
-        ->toBeArray()
-        ->toBe(['whatsapp', 'email']);
+    expect($cliente->canais_envio)->toBeArray();
+});
+test('canais_envio tem valores válidos', function () {
+    $cliente = Cliente::factory()->create();
+    foreach ($cliente->canais_envio as $canalEnvio) {
+        expect(fn () => CanalCobranca::from($canalEnvio))->not->toThrow(ValueError::class);
+    }
 });
