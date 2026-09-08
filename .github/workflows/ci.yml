@@ -11,8 +11,18 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v4
+
+      - name: Prepare .env
+        run: cp .env.example .env
+
+      - name: Fix permissions for container user
+        run: sudo chown -R 1000:1000 .
+
+
       - run: docker compose up -d mysql
-      - run: docker compose build billbatch
+      - run: docker compose up -d billbatch
+      - run: docker compose logs billbatch
       - run: docker compose run --rm billbatch composer install
+      - run: docker compose exec -T billbatch php artisan key:generate
       - run: docker compose run --rm billbatch ./vendor/bin/pint --test
       - run: docker compose run --rm billbatch ./vendor/bin/pest
