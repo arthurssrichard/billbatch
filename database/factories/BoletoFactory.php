@@ -19,18 +19,18 @@ class BoletoFactory extends Factory
     public function definition(): array
     {
         return [
-            'cliente_id' => \App\Models\Cliente::factory(),
-            'empresa_id' => function (array $attributes){
+            'cliente_id' => Cliente::factory(),
+            'empresa_id' => function (array $attributes) {
                 return Cliente::find($attributes['cliente_id'])->empresa_id;
             },
             'codigo_barras' => fake()->unique()->regexify('[0-9]{5}\.[0-9]{5} [0-9]{5}\.[0-9]{6} [0-9]{5}\.[0-9]{6} [0-9]{1} [0-9]{14}'),
-            'grupo' => fake()->randomElement([100, 150, 200, 250]) . '_' . fake()->randomElement([5, 10, 15, 20, 25]) . '_' . strtoupper(fake()->monthName()),
-            'caminho_arquivo' => function (array $attributes){
-                return 'boletos/' . $attributes['grupo'] . '/' . fake()->company() . '.pdf';
-            },            
+            'grupo' => fake()->randomElement([100, 150, 200, 250]).'_'.fake()->randomElement([5, 10, 15, 20, 25]).'_'.strtoupper(fake()->monthName()),
+            'caminho_arquivo' => function (array $attributes) {
+                return 'boletos/'.$attributes['grupo'].'/'.fake()->company().'.pdf';
+            },
             'enviado' => fake()->boolean(),
             'pago' => fake()->boolean(),
-            'data_emissao' => fake()->dateTimeThisYear()->format('Y-m-d')
+            'data_emissao' => fake()->dateTimeThisYear()->format('Y-m-d'),
         ];
     }
 }

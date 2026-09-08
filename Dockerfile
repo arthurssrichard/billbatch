@@ -66,5 +66,6 @@ USER www-data
 
 # Entrypoint para composer install e npm install
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
+CMD ["apache2-foreground"]
 
 EXPOSE 80

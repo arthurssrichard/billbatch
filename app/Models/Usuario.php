@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 class Usuario extends Model
 {
     use HasFactory;
-    
+
     protected $fillable = ['nome', 'uuid', 'ultima_atividade'];
 
     protected function casts(): array
