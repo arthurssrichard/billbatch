@@ -20,7 +20,7 @@ class UsuarioFactory extends Factory
         return [
             'nome' => fake()->name(),
             'uuid' => fake()->uuid(),
-            'ultima_atividade' => now()
+            'ultima_atividade' => now(),
         ];
     }
 }

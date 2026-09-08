@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Models\Email;
+use App\Models\Empresa;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -25,12 +26,12 @@ class EmailFactory extends Factory
         };
 
         return [
-            'empresa_id' => \App\Models\Empresa::factory(),
+            'empresa_id' => Empresa::factory(),
             'limite_emails_hora' => fake()->randomELement([100, 150, 200, 300]),
             'remetente_nome' => fake()->company(),
             'remetente_endereco' => fake()->safeEmail(),
             'remetente_senha' => fake()->password(),
-            'smtp_servidor' => 'smtp.' . fake()->domainName(),
+            'smtp_servidor' => 'smtp.'.fake()->domainName(),
             'smtp_secure' => $secure,
             'smtp_porta' => $port,
         ];

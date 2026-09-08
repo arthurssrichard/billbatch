@@ -4,14 +4,14 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Boleto extends Model
 {
     use HasFactory;
 
-    protected $fillable = ['empresa_id','codigo_barras','grupo','caminho_arquivo','enviado','pago','data_emissao'];
+    protected $fillable = ['empresa_id', 'codigo_barras', 'grupo', 'caminho_arquivo', 'enviado', 'pago', 'data_emissao'];
 
     protected function casts(): array
     {

@@ -2,9 +2,10 @@
 
 namespace Database\Factories;
 
-use App\Models\Contato;
-use App\Models\Cliente;
 use App\Enums\CanalCobranca;
+use App\Models\Cliente;
+use App\Models\Contato;
+use App\Models\Empresa;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
 /**
@@ -29,10 +30,10 @@ class ClienteFactory extends Factory
     public function definition(): array
     {
         return [
-            'empresa_id' => \App\Models\Empresa::factory(),
+            'empresa_id' => Empresa::factory(),
             'identificador_externo' => fake()->uuid(),
             'nome' => fake()->name(),
-            'canais_envio' => fake()->randomElements(CanalCobranca::cases(), fake()->numberBetween(1,count(CanalCobranca::cases()))),
+            'canais_envio' => fake()->randomElements(CanalCobranca::cases(), fake()->numberBetween(1, count(CanalCobranca::cases()))),
             'cnpj' => fake()->unique()->regexify('^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$'),
         ];
     }

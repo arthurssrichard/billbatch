@@ -2,6 +2,7 @@
 
 namespace Database\Factories;
 
+use App\Models\Cliente;
 use App\Models\Contato;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -18,7 +19,7 @@ class ContatoFactory extends Factory
     public function definition(): array
     {
         return [
-            'cliente_id' => \App\Models\Cliente::factory(),
+            'cliente_id' => Cliente::factory(),
             'endereco_email' => fake()->email(),
         ];
     }

@@ -1,10 +1,9 @@
 <?php
 
+use App\Models\Cliente;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
-
-use App\Models\Cliente;
 
 return new class extends Migration
 {

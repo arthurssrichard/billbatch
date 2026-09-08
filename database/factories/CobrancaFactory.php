@@ -2,10 +2,9 @@
 
 namespace Database\Factories;
 
-use App\Enums\TipoCobranca;
 use App\Enums\CanalCobranca;
+use App\Enums\TipoCobranca;
 use App\Models\Boleto;
-use App\Models\Contato;
 use App\Models\Cobranca;
 use Illuminate\Database\Eloquent\Factories\Factory;
 
@@ -24,11 +23,11 @@ class CobrancaFactory extends Factory
         return [
             'boleto_id' => Boleto::factory(),
             'canal_envio' => fake()->randomElement(CanalCobranca::cases()),
-            'contatos_enviados' => function(array $attributes){
+            'contatos_enviados' => function (array $attributes) {
                 return Boleto::find($attributes['boleto_id'])->cliente->contatos->pluck('endereco_email')->implode(';');
             },
             'tipo' => fake()->randomElement(TipoCobranca::cases()),
-            'data_envio' => now()
+            'data_envio' => now(),
         ];
     }
 }
