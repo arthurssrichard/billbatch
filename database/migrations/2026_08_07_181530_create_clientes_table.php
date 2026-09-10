@@ -17,6 +17,7 @@ return new class extends Migration
             $table->foreignIdFor(Empresa::class)->constrained()->cascadeOnDelete();
             $table->string('identificador_externo');
             $table->string('nome');
+            $table->string('grupo')->nullable();
             $table->json('canais_envio')->nullable(); // [email,whatsapp]
             $table->string('cnpj');
             $table->timestamps();
