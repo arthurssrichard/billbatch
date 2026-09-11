@@ -108,7 +108,8 @@ class GerarBoletoFakeService
 
         $vencimento = now()
             ->startOfMonth()
-            ->addDays($dia - 1);
+            ->addDays($dia - 1)
+            ->addMonth();
 
         return [
             'valor' => $valor,
