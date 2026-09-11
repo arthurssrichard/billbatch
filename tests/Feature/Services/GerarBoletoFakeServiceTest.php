@@ -42,6 +42,10 @@ test('dois grupos em empresas diferentes não colidem', function (){
     $resultadoEmpresa1 = GerarBoletoFakeService::gerarDeTodosClientes($empresa1);
     $resultadoEmpresa2 = GerarBoletoFakeService::gerarDeTodosClientes($empresa2);
 
+    // Verifica se ambos existem de fato (para caso de por algum motivo um sobscrever o outro)
+    Storage::disk('public')->assertExists($resultadoEmpresa1['250_10']);
+    Storage::disk('public')->assertExists($resultadoEmpresa2['250_10']);
+
     // Confirma que tem caminhos diferentes
     expect($resultadoEmpresa1['250_10'])->not->toBe($resultadoEmpresa2['250_10']);
 });
