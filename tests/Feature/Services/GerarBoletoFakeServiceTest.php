@@ -1,11 +1,11 @@
 <?php
 
-use Illuminate\Support\Facades\Storage;
 use App\Models\Cliente;
 use App\Models\Empresa;
 use App\Services\GerarBoletoFakeService;
+use Illuminate\Support\Facades\Storage;
 
-test('gera um pdf por grupo distinto de clientes', function(){
+test('gera um pdf por grupo distinto de clientes', function () {
     Storage::fake('public');
 
     $empresa = Empresa::factory()->create();
@@ -19,7 +19,7 @@ test('gera um pdf por grupo distinto de clientes', function(){
     Storage::disk('public')->assertExists($resultado['150_10']);
 });
 
-test('dois grupos em empresas diferentes não colidem', function (){
+test('dois grupos em empresas diferentes não colidem', function () {
     Storage::fake('public');
 
     // Cria 2 empresas

@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Cliente;
 use App\Models\Empresa;
 use Illuminate\Support\Facades\Storage;
 
@@ -14,7 +15,7 @@ test('gera boletos para a empresa especificada via --empresa', function () {
     Storage::fake('public');
 
     $empresa = Empresa::factory()
-        ->has(\App\Models\Cliente::factory()->count(2)->state(['grupo' => '150_10']))
+        ->has(Cliente::factory()->count(2)->state(['grupo' => '150_10']))
         ->create();
 
     $this->artisan('boletos:gerar-fake', ['--empresa' => $empresa->id])
@@ -29,7 +30,7 @@ test('sem --empresa, processa ao menos uma empresa existente', function () {
     Storage::fake('public');
 
     Empresa::factory()
-        ->has(\App\Models\Cliente::factory()->count(2)->state(['grupo' => '150_10']))
+        ->has(Cliente::factory()->count(2)->state(['grupo' => '150_10']))
         ->count(3)
         ->create();
 

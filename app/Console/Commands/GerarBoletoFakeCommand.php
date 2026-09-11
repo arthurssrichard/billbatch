@@ -2,12 +2,11 @@
 
 namespace App\Console\Commands;
 
+use App\Models\Empresa;
+use App\Services\GerarBoletoFakeService;
 use Illuminate\Console\Attributes\Description;
 use Illuminate\Console\Attributes\Signature;
 use Illuminate\Console\Command;
-use App\Models\Empresa;
-use App\Services\GerarBoletoFakeService;
-
 
 #[Signature('boletos:gerar-fake {--empresa= : ID de uma empresa específica. Se omitido, gera para um número aleatório de empresas existentes.}')]
 #[Description('Gera PDFs de boletos fake para uma ou mais empresas existentes.')]
@@ -54,5 +53,4 @@ class GerarBoletoFakeCommand extends Command
 
         return self::SUCCESS;
     }
-
 }
