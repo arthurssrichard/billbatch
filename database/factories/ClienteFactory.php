@@ -33,6 +33,7 @@ class ClienteFactory extends Factory
             'empresa_id' => Empresa::factory(),
             'identificador_externo' => fake()->uuid(),
             'nome' => fake()->name(),
+            'grupo' => fake()->randomElement([100, 150, 200, 250]).'_'.fake()->randomElement([5, 10, 15, 20, 25]),
             'canais_envio' => fake()->randomElements(CanalCobranca::cases(), fake()->numberBetween(1, count(CanalCobranca::cases()))),
             'cnpj' => fake()->unique()->regexify('^\d{2}\.\d{3}\.\d{3}\/\d{4}-\d{2}$'),
         ];

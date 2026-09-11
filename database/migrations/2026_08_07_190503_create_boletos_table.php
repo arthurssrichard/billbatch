@@ -18,7 +18,7 @@ return new class extends Migration
             $table->foreignIdFor(Cliente::class)->contrained()->cascadeOnDelete();
             $table->foreignIdFor(Empresa::class)->contrained()->cascadeOnDelete();
             $table->string('codigo_barras');
-            $table->string('grupo');
+            $table->string('grupo')->nullable();
             $table->string('caminho_arquivo');
             $table->boolean('enviado')->default(false);
             $table->boolean('pago')->default(false);
