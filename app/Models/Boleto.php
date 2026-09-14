@@ -2,14 +2,17 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\PertenceAoUsuarioAtual;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Override;
 
 class Boleto extends Model
 {
     use HasFactory;
+    use PertenceAoUsuarioAtual;
 
     protected $fillable = ['empresa_id', 'codigo_barras', 'grupo', 'caminho_arquivo', 'enviado', 'pago', 'data_emissao'];
 
@@ -18,6 +21,12 @@ class Boleto extends Model
         return [
             'data_emissao' => 'datetime',
         ];
+    }
+
+    #[Override]
+    protected static function caminhoAteEmpresa(): string
+    {
+        return 'empresa';
     }
 
     public function cobrancas(): HasMany
@@ -30,7 +39,7 @@ class Boleto extends Model
         return $this->belongsTo(Cliente::class);
     }
 
-    public function empresas(): BelongsTo
+    public function empresa(): BelongsTo
     {
         return $this->belongsTo(Empresa::class);
     }

@@ -2,14 +2,17 @@
 
 namespace App\Models;
 
+use App\Models\Concerns\PertenceAoUsuarioAtual;
 use App\Enums\LogStatus;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Override;
 
 class Log extends Model
 {
     use HasFactory;
+    use PertenceAoUsuarioAtual;
 
     protected $fillable = ['status', 'arquivo_origem', 'nome', 'mensagem'];
 
@@ -19,6 +22,13 @@ class Log extends Model
             'status' => LogStatus::class,
         ];
     }
+
+    #[Override] 
+    protected static function caminhoAteEmpresa(): string
+    {
+        return 'empresa';
+    }
+
 
     public function empresa(): BelongsTo
     {

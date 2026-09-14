@@ -2,6 +2,8 @@
 
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
+use Illuminate\Support\Facades\Route;
+use App\Models\Usuario;
 
 /*
 |--------------------------------------------------------------------------
@@ -44,7 +46,24 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function assertScopeIsolaPorUsuario(string $rota, callable $criarRegistro, string $modelClass): void
 {
-    // ..
+    Route::middleware(['web', \App\Http\Middleware\VerifyVisitorToken::class])
+        ->get($rota, function () use ($criarRegistro, $modelClass) {
+            $empresa = app(Usuario::class)->empresas()->firstOrFail();
+            $quantidadeEsperada = $criarRegistro($empresa);
+
+            return [
+                'ids' => $modelClass::all()->pluck('id'),
+                'quantidade_esperada' => $quantidadeEsperada,
+            ];
+        });
+
+    $respostaA = test()->get($rota)->json();
+    $respostaB = test()->get($rota)->json();
+
+    // dd($respostaA, $respostaB);
+    expect($respostaA['ids'])->toHaveCount($respostaA['quantidade_esperada'])
+        ->and($respostaB['ids'])->toHaveCount($respostaB['quantidade_esperada'])
+        ->and($respostaA['ids'])->not->toEqualCanonicalizing($respostaB['ids']);
 }
