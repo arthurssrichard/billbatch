@@ -2,6 +2,7 @@
 
 namespace App\Http\Middleware;
 
+use App\Models\Usuario;
 use App\Services\ResolverVisitanteService;
 use Closure;
 use Illuminate\Http\Request;
@@ -26,7 +27,8 @@ class VerifyVisitorToken
         }
 
         $usuario = ResolverVisitanteService::resolverOuCriar($token);
-        app()->instance('usuarioAtual', $usuario);
+
+        app()->instance(Usuario::class, $usuario);
 
         return $next($request);
     }
