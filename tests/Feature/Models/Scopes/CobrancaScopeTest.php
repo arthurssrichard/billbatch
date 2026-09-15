@@ -1,9 +1,8 @@
 <?php
 
+use App\Models\Boleto;
 use App\Models\Cliente;
 use App\Models\Cobranca;
-use App\Models\Boleto;
-
 
 test('visitante só enxerga suas proprias cobrancas', function () {
     assertScopeIsolaPorUsuario(
@@ -17,6 +16,7 @@ test('visitante só enxerga suas proprias cobrancas', function () {
             Cobranca::factory()->count(3)->create([
                 'boleto_id' => $boleto->id,
             ]);
+
             return $boleto->cobrancas()->count();
         },
         Cobranca::class,

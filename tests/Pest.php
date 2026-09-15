@@ -1,9 +1,10 @@
 <?php
 
-use Illuminate\Foundation\Testing\RefreshDatabase;
-use Tests\TestCase;
-use Illuminate\Support\Facades\Route;
+use App\Http\Middleware\VerifyVisitorToken;
 use App\Models\Usuario;
+use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Route;
+use Tests\TestCase;
 
 /*
 |--------------------------------------------------------------------------
@@ -48,7 +49,7 @@ expect()->extend('toBeOne', function () {
 
 function assertScopeIsolaPorUsuario(string $rota, callable $criarRegistro, string $modelClass): void
 {
-    Route::middleware(['web', \App\Http\Middleware\VerifyVisitorToken::class])
+    Route::middleware(['web', VerifyVisitorToken::class])
         ->get($rota, function () use ($criarRegistro, $modelClass) {
             $empresa = app(Usuario::class)->empresas()->firstOrFail();
             $quantidadeEsperada = $criarRegistro($empresa);

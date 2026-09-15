@@ -12,6 +12,7 @@ test('visitante só enxerga seus próprios boletos', function () {
                 'empresa_id' => $empresa->id,
                 'cliente_id' => $cliente->id,
             ]);
+
             return $cliente->boletos()->count();
         },
         Boleto::class,
