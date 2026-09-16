@@ -2,7 +2,6 @@
 
 namespace App\Services;
 
-use App\Models\Empresa;
 use App\Models\Usuario;
 
 class ResolverVisitanteService
@@ -14,7 +13,6 @@ class ResolverVisitanteService
         // Se não existir, cria
         if (! $usuario) {
             $usuario = Usuario::factory()
-                ->has(Empresa::factory())
                 ->create(['uuid' => $token]);
         }
 
