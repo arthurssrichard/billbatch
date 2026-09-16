@@ -53,4 +53,15 @@ class Empresa extends Model
     {
         static::addGlobalScope(new IsolamentoPorUsuarioScope);
     }
+
+    public function resolveRouteBinding($value, $field = null)
+    {
+        if (! app()->bound(Usuario::class)) {
+            abort(404);
+        }
+
+        return $this->where($field ?? $this->getRouteKeyName(), $value)
+            ->where('usuario_id', app(Usuario::class)->id)
+            ->firstOrFail();
+    }
 }
