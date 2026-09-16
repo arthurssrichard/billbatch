@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Enums\TipoCobranca;
+use App\Models\Concerns\PertenceAoUsuarioAtual;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -10,6 +11,7 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 class ModeloMensagemCobranca extends Model
 {
     use HasFactory;
+    use PertenceAoUsuarioAtual;
 
     protected $fillable = ['tipo', 'assunto', 'corpo'];
 
@@ -18,6 +20,11 @@ class ModeloMensagemCobranca extends Model
         return [
             'tipo' => TipoCobranca::class,
         ];
+    }
+
+    protected static function caminhoAteEmpresa(): string
+    {
+        return 'empresa';
     }
 
     public function empresa(): BelongsTo

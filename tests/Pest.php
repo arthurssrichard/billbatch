@@ -1,6 +1,11 @@
 <?php
 
+use App\Http\Middleware\VerifyVisitorToken;
+use App\Models\Empresa;
+use App\Models\Usuario;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
 
 /*
@@ -44,7 +49,28 @@ expect()->extend('toBeOne', function () {
 |
 */
 
-function something()
+function assertScopeIsolaPorUsuario(string $rota, callable $criarRegistro, string $modelClass): void
 {
-    // ..
+    Storage::fake('public');
+    Route::middleware(['web', VerifyVisitorToken::class])
+        ->get($rota, function () use ($criarRegistro, $modelClass) {
+            $usuario = app(Usuario::class);
+            $empresa = Empresa::factory()->create(['usuario_id' => $usuario->id]);
+            $quantidadeEsperada = $criarRegistro($empresa);
+
+            return [
+                'ids' => $modelClass::all()->pluck('id'),
+                'quantidade_esperada' => $quantidadeEsperada,
+            ];
+        });
+
+    $respostaA = test()->get($rota)->json();
+    $respostaB = test()->get($rota)->json();
+    expect($respostaA['ids'])->toHaveCount($respostaA['quantidade_esperada'])
+        ->and($respostaB['ids'])->toHaveCount($respostaB['quantidade_esperada'])
+        ->and($respostaA['ids'])->not->toEqualCanonicalizing($respostaB['ids']);
 }
+
+uses(RefreshDatabase::class)->beforeEach(function () {
+    Storage::fake('public');
+})->in('Feature');
