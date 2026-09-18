@@ -1,15 +1,17 @@
 <?php
 
 use App\Models\Empresa;
+use App\Models\Usuario;
 
 test('empresas.index mostra só as empresas do visitante atual', function () {
-    $respostaA = $this->get('/');
-    $empresaA = Empresa::first();
+    $usuarioA = Usuario::factory()->create();
+    $empresaA = Empresa::factory()->create(['usuario_id' => $usuarioA->id]);
 
-    $paginaA = $this->withCookie('visitor_token', $empresaA->usuario->uuid)
-        ->get('/empresas');
-    $paginaA->assertSee($empresaA->nome);
+    $usuarioB = Usuario::factory()->create();
+    $empresaB = Empresa::factory()->create(['usuario_id' => $usuarioB->id]);
 
-    $paginaB = $this->withCookie('visitor_token', '')->get('/empresas');
-    $paginaB->assertDontSee($empresaA->nome);
+    $pagina = $this->withCookie('visitor_token', $usuarioA->uuid)->get('/empresas');
+
+    $pagina->assertSee($empresaA->nome);
+    $pagina->assertDontSee($empresaB->nome);
 });
