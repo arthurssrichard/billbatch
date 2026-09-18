@@ -11,8 +11,7 @@ class Index extends Component
     public function render()
     {
         dd(
-            app()->bound(Usuario::class) ? app(Usuario::class)->id : 'não bound',
-            Empresa::pluck('id', 'usuario_id')
+            \App\Models\Empresa::pluck('nome'),
         );
 
         return view('livewire.empresas.index', [
