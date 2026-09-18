@@ -10,7 +10,7 @@ class Index extends Component
     public function render()
     {
         dd(
-            Empresa::pluck('nome'),
+            \App\Models\Empresa::withoutGlobalScopes()->pluck('nome', 'usuario_id'),
         );
 
         return view('livewire.empresas.index', [
