@@ -2,7 +2,6 @@
 
 use App\Models\Empresa;
 
-
 test('empresas.index mostra só as empresas do visitante atual', function () {
     $respostaA = $this->get('/');
     $empresaA = Empresa::first();
@@ -11,6 +10,6 @@ test('empresas.index mostra só as empresas do visitante atual', function () {
         ->get('/empresas');
     $paginaA->assertSee($empresaA->nome);
 
-    $paginaB = $this->withCookie('visitor_token','')->get('/empresas');
+    $paginaB = $this->withCookie('visitor_token', '')->get('/empresas');
     $paginaB->assertDontSee($empresaA->nome);
 });

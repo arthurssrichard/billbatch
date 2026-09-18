@@ -13,5 +13,6 @@ class Show extends Component
     {
         return view('livewire.empresas.show', [
             'empresa' => $this->empresa,
-        ])->layout('components.layout', ['title' => $this->empresa->nome]);    }
+        ])->layout('components.layout', ['title' => $this->empresa->nome]);
+    }
 }
