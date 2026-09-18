@@ -12,8 +12,6 @@ test('empresas.index mostra só as empresas do visitante atual', function () {
 
     $pagina = $this->withCookie('visitor_token', $usuarioA->uuid)->get('/empresas');
 
-
-    
     $pagina->assertSee($empresaA->nome);
     $pagina->assertDontSee($empresaB->nome);
 });
