@@ -1,18 +1,19 @@
 <?php
 
+use App\Livewire\Empresas\Clientes\Index as ClientesIndex;
+use App\Livewire\Empresas\Envios\Index as EnviosIndex;
+use App\Livewire\Empresas\FontesDados\Index as FontesDadosIndex;
+use App\Livewire\Empresas\Index as EmpresasIndex;
+use App\Livewire\Empresas\Logs\Index as LogsIndex;
+use App\Livewire\Empresas\Show as EmpresasShow;
 use App\Livewire\Onboarding;
-use App\Models\Empresa;
-use App\Models\Usuario;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', Onboarding::class)->name('onboarding');
 
-// Rota provisória para não dar erro no OnboardingTest
-Route::get('/empresas/{empresa}', function (Empresa $empresa) {
-    return response()->json([
-        'empresa_id' => $empresa->id,
-        'empresa_nome' => $empresa->nome,
-        'usuario_bound_no_container' => app()->bound(Usuario::class),
-        'usuario_atual_id' => app()->bound(Usuario::class) ? app(Usuario::class)->id : null,
-    ]);
-})->name('empresas.show');
+Route::get('/empresas', EmpresasIndex::class)->name('empresas.index');
+Route::get('/empresas/{empresa}', EmpresasShow::class)->name('empresas.show');
+Route::get('/empresas/{empresa}/clientes', ClientesIndex::class)->name('empresas.clientes.index');
+Route::get('/empresas/{empresa}/logs', LogsIndex::class)->name('empresas.logs.index');
+Route::get('/empresas/{empresa}/fontes-dados', FontesDadosIndex::class)->name('empresas.fontes-dados.index');
+Route::get('/empresas/{empresa}/envios', EnviosIndex::class)->name('empresas.envios.index');

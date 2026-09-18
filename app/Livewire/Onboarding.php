@@ -13,7 +13,7 @@ class Onboarding extends Component
 
         $empresa = OnboardingService::garantirEmpresaAtiva(app(Usuario::class));
 
-        return redirect()->route('empresas.show', $empresa);
+        return redirect()->route('empresas.index');
     }
 
     public function render()
