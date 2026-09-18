@@ -4,6 +4,8 @@ use App\Models\Empresa;
 use App\Models\Usuario;
 
 test('empresas.index mostra só as empresas do visitante atual', function () {
+    $this->withoutExceptionHandling();
+
     $usuarioA = Usuario::factory()->create();
     $empresaA = Empresa::factory()->create(['usuario_id' => $usuarioA->id]);
 
