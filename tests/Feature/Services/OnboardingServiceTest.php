@@ -8,7 +8,7 @@ test('primeira visita cria uma empresa completa com boletos fake', function () {
     $this->withoutExceptionHandling();
     expect(Empresa::count())->toBe(0);
     $resposta = $this->get('/');
-    $resposta->assertRedirectToRoute('empresas.show', Empresa::first());
+    $resposta->assertRedirectToRoute('empresas.index');
 
     $usuario = Usuario::first();
     $empresa = $usuario->empresas->first();
@@ -25,7 +25,7 @@ test('segunda visita não cria uma nova empresa', function () {
     expect(Empresa::count())->toBe(0);
     $this->withoutExceptionHandling();
     $respostaA = $this->get('/');
-    $respostaA->assertRedirectToRoute('empresas.show', Empresa::first());
+    $respostaA->assertRedirectToRoute('empresas.index');
     $token = $respostaA->getCookie('visitor_token')->getValue();
 
     expect(Empresa::count())->toBe(1);
