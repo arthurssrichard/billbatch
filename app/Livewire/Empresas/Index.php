@@ -11,7 +11,7 @@ class Index extends Component
     public function render()
     {
         dd(
-            app()->bound(Usuario::class) ? app(Usuario::class)->id : 'não bound',
+            app()->bound(\App\Models\Usuario::class) ? app(\App\Models\Usuario::class)->id : 'não bound',
             Empresa::pluck('id', 'usuario_id')
         );
 
