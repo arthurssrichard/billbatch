@@ -19,6 +19,7 @@ jobs:
 
       - run: docker compose up -d mysql
       - run: docker compose run --rm billbatch composer install
+      - run: docker compose run --rm billbatch npm run build
       - run: docker compose up -d billbatch
       - run: docker compose exec -T billbatch php artisan key:generate
       - run: docker compose run --rm billbatch ./vendor/bin/pint --test
