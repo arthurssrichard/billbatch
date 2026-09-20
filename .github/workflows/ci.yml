@@ -22,5 +22,6 @@ jobs:
       - run: docker compose run --rm billbatch npm run build
       - run: docker compose up -d billbatch
       - run: docker compose exec -T billbatch php artisan key:generate
+      - run: docker compose exec -T billbatch php artisan config:clear
       - run: docker compose run --rm billbatch ./vendor/bin/pint --test
       - run: docker compose run --rm billbatch ./vendor/bin/pest
