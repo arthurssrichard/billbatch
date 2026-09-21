@@ -19,14 +19,13 @@ test('extrai nome do cliente e código de barras de uma página', function () {
     ]);
 
     $config = ConfiguracaoParser::factory()->create(['empresa_id' => $empresa->id]);
-    
+
     $gerados = GerarBoletoFakeService::gerarDeTodosClientes($empresa);
     $paginas = PdfSplitterService::dividir($gerados['150_10'], 'boletos_processados/teste');
-    
 
     $parser = new LayoutParserService($config);
     $dados = $parser->extrairDadosDaPagina(Storage::disk('public')->path($paginas[0]));
-    
+
     expect($dados['nome_cliente'])->toBe($cliente->nome)
         ->and($dados['codigo_barras'])->not->toBeNull();
 });

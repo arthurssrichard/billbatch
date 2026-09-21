@@ -2,8 +2,8 @@
 
 namespace App\Services;
 
-use setasign\Fpdi\Fpdi;
 use Illuminate\Support\Facades\Storage;
+use setasign\Fpdi\Fpdi;
 
 class PdfSplitterService
 {
@@ -16,13 +16,13 @@ class PdfSplitterService
     {
         $conteudoOrigem = Storage::disk('public')->path($caminhoPdfOrigem);
 
-        $pdf = new Fpdi();
+        $pdf = new Fpdi;
         $totalPaginas = $pdf->setSourceFile($conteudoOrigem);
 
         $caminhosGerados = [];
 
         for ($pagina = 1; $pagina <= $totalPaginas; $pagina++) {
-            $novoPdf = new Fpdi();
+            $novoPdf = new Fpdi;
             $novoPdf->setSourceFile($conteudoOrigem);
             $templateId = $novoPdf->importPage($pagina);
             $tamanho = $novoPdf->getTemplateSize($templateId);

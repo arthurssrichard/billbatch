@@ -1,9 +1,9 @@
 <?php
 
+use App\Models\Cliente;
+use App\Models\Empresa;
 use App\Services\GerarBoletoFakeService;
 use App\Services\PdfSplitterService;
-use App\Models\Empresa;
-use App\Models\Cliente;
 use Illuminate\Support\Facades\Storage;
 use setasign\Fpdi\Fpdi;
 
@@ -26,7 +26,7 @@ test('divide um pdf multi-página em arquivos individuais por página', function
     foreach ($paginas as $caminho) {
         Storage::disk('public')->assertExists($caminho);
 
-        $pdf = new Fpdi();
+        $pdf = new Fpdi;
         $totalPaginas = $pdf->setSourceFile(Storage::disk('public')->path($caminho));
 
         expect($totalPaginas)->toBe(1);

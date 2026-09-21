@@ -11,7 +11,7 @@ class LayoutParserService
 
     public function extrairDadosDaPagina(string $caminhoPdfPagina): array
     {
-        $parser = new PdfTextParser();
+        $parser = new PdfTextParser;
         $pdf = $parser->parseFile($caminhoPdfPagina);
         $texto = $pdf->getText();
 
@@ -23,7 +23,7 @@ class LayoutParserService
 
     private function extrair(string $texto, string $regex): ?string
     {
-        if(preg_match($regex, $texto, $matches)){
+        if (preg_match($regex, $texto, $matches)) {
             return trim($matches[1] ?? $matches[0]);
         }
 
