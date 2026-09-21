@@ -21,7 +21,7 @@ class ConfiguracaoParserFactory extends Factory
         return [
             'empresa_id' => Empresa::factory(),
             'regex_nome_cliente' => '/PAGADOR\s*\n\s*(.+)/i',
-            'regex_codigo_barras' => '/\d{5}\.\d{5}\s\d{5}\.\d{6}\s\d{5}\.\d{6}\s\d\s\d{14}/',
+            'regex_codigo_barras' => '/001\d{16}/',
         ];
     }
 }
