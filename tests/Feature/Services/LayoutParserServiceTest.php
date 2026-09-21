@@ -1,16 +1,16 @@
 <?php
 
+use App\Enums\LogStatus;
 use App\Models\Cliente;
 use App\Models\ConfiguracaoParser;
 use App\Models\Empresa;
+use App\Models\Log;
 use App\Services\GerarBoletoFakeService;
 use App\Services\LayoutParserService;
 use App\Services\PdfSplitterService;
 use Illuminate\Support\Facades\Storage;
 
 test('extrai nome do cliente e código de barras de uma página', function () {
-    Storage::fake('public');
-
     $empresa = Empresa::factory()->create();
     $cliente = Cliente::factory()->create([
         'empresa_id' => $empresa->id,
@@ -27,7 +27,8 @@ test('extrai nome do cliente e código de barras de uma página', function () {
     $dados = $parser->extrairDadosDaPagina(Storage::disk('public')->path($paginas[0]));
 
     expect($dados['nome_cliente'])->toBe($cliente->nome)
-        ->and($dados['codigo_barras'])->not->toBeNull();
+        ->and($dados['codigo_barras'])->not->toBeNull()
+        ->and(Log::where('status', LogStatus::ERROR)->count())->toBe(0);
 });
 
 test('retorna null quando o regex não encontra nada no texto', function () {
@@ -42,4 +43,21 @@ test('retorna null quando o regex não encontra nada no texto', function () {
         ->invoke($parser, 'texto qualquer sem relação', $config->regex_nome_cliente);
 
     expect($resultado)->toBeNull();
+});
+
+test('registra log de erro quando não consegue extrair nome do cliente', function () {
+    $empresa = Empresa::factory()->create();
+    $config = ConfiguracaoParser::factory()->create([
+        'empresa_id' => $empresa->id,
+        'regex_nome_cliente' => '/PADRAO_QUE_NUNCA_VAI_BATER/',
+    ]);
+
+    $cliente = Cliente::factory()->create(['empresa_id' => $empresa->id, 'grupo' => '150_10']);
+    $gerados = GerarBoletoFakeService::gerarDeTodosClientes($empresa);
+    $paginas = PdfSplitterService::dividir($gerados['150_10'], 'boletos_processados/teste');
+
+    $parser = new LayoutParserService($config);
+    $parser->extrairDadosDaPagina(Storage::disk('public')->path($paginas[0]));
+
+    expect(Log::where('status', LogStatus::ERROR)->count())->toBe(1);
 });
