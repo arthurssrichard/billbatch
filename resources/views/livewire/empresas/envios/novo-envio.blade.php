@@ -76,43 +76,49 @@
         @if ($fase === 3)
             <h2 class="font-sans font-semibold text-xl text-mist-50 mb-6">Boletos processados</h2>
 
-            <div class="overflow-x-auto border border-mist-800 rounded-sm mb-6">
-                <table class="w-full text-left text-sm">
-                    <thead>
-                        <tr class="border-b border-mist-800 text-mist-400">
-                            <th class="px-4 py-3 font-medium">Cliente identificado</th>
-                            <th class="px-4 py-3 font-medium">E-mails</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($resultadosProcessados as $resultado)
-                            <tr class="border-b border-mist-800/50">
-                                <td class="px-4 py-3">
-                                    @if ($resultado['cliente'])
-                                        <span class="text-mist-100">{{ $resultado['cliente']['nome'] }}</span>
-                                    @else
-                                        <span class="text-red-400">Não identificado</span>
-                                        @if ($resultado['nome_cliente_extraido'])
-                                            <span class="text-mist-500 text-xs block">({{ $resultado['nome_cliente_extraido'] }})</span>
-                                        @endif
-                                    @endif
-                                </td>
-                                <td class="px-4 py-3">
-                                    <div class="flex flex-wrap gap-1">
-                                        @forelse ($resultado['cliente']['contatos'] ?? [] as $contato)
-                                            <span class="bg-mist-800 text-mist-300 text-xs px-2 py-1 rounded-full">
-                                                {{ $contato['endereco_email'] }}
-                                            </span>
-                                        @empty
-                                            <span class="text-mist-600 text-xs">—</span>
-                                        @endforelse
-                                    </div>
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
-            </div>
+            @foreach ($this->resultadosAgrupados as $grupo => $resultados)
+                <div class="mb-8">
+                    <h3 class="font-sans font-medium text-mist-300 mb-2">{{ $grupo }}</h3>
+
+                    <div class="overflow-x-auto border border-mist-800 rounded-sm">
+                        <table class="w-full text-left text-sm">
+                            <thead>
+                                <tr class="border-b border-mist-800 text-mist-400">
+                                    <th class="px-4 py-3 font-medium">Cliente identificado</th>
+                                    <th class="px-4 py-3 font-medium">E-mails</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @foreach ($resultados as $resultado)
+                                    <tr class="border-b border-mist-800/50">
+                                        <td class="px-4 py-3">
+                                            @if ($resultado['cliente'])
+                                                <span class="text-mist-100">{{ $resultado['cliente']['nome'] }}</span>
+                                            @else
+                                                <span class="text-red-400">Não identificado</span>
+                                                @if ($resultado['nome_cliente_extraido'])
+                                                    <span class="text-mist-500 text-xs block">({{ $resultado['nome_cliente_extraido'] }})</span>
+                                                @endif
+                                            @endif
+                                        </td>
+                                        <td class="px-4 py-3">
+                                            <div class="flex flex-wrap gap-1">
+                                                @forelse ($resultado['cliente']['contatos'] ?? [] as $contato)
+                                                    <span class="bg-mist-800 text-mist-300 text-xs px-2 py-1 rounded-full">
+                                                        {{ $contato['endereco_email'] }}
+                                                    </span>
+                                                @empty
+                                                    <span class="text-mist-600 text-xs">—</span>
+                                                @endforelse
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            @endforeach
 
             <button wire:click="voltar" class="text-sm text-mist-400 hover:text-mist-200">← Voltar</button>
         @endif

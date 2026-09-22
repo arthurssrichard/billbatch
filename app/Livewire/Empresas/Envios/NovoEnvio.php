@@ -60,6 +60,11 @@ class NovoEnvio extends Component
         );
     }
 
+    public function getResultadosAgrupadosProperty()
+    {
+        return collect($this->resultadosProcessados)->groupBy('grupo');
+    }
+
     public function render()
     {
         return view('livewire.empresas.envios.novo-envio')->layout('components.layout', ['title' => 'Novo envio']);
