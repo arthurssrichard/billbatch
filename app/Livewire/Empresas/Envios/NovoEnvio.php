@@ -3,11 +3,12 @@
 namespace App\Livewire\Empresas\Envios;
 
 use App\Models\Cliente;
-use App\Models\Boleto;
 use App\Models\Empresa;
 use App\Services\GerarBoletoFakeService;
-use Livewire\Component;
 use App\Services\ProcessarBoletoService;
+use Illuminate\Support\Facades\Storage;
+use Livewire\Component;
+use setasign\Fpdi\Fpdi;
 
 class NovoEnvio extends Component
 {
@@ -62,6 +63,7 @@ class NovoEnvio extends Component
         foreach ($this->resultadosProcessados as $resultado) {
             if (! $resultado['cliente']) {
                 $ignorados++;
+
                 continue;
             }
 
@@ -85,9 +87,10 @@ class NovoEnvio extends Component
 
     private function contarPaginas(string $caminho): int
     {
-        $pdf = new \setasign\Fpdi\Fpdi();
+        $pdf = new Fpdi;
+
         return $pdf->setSourceFile(
-            \Illuminate\Support\Facades\Storage::disk('public')->path($caminho)
+            Storage::disk('public')->path($caminho)
         );
     }
 

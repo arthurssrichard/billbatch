@@ -2,13 +2,13 @@
 
 use App\Livewire\Empresas\Clientes\Index as ClientesIndex;
 use App\Livewire\Empresas\Envios\Index as EnviosIndex;
+use App\Livewire\Empresas\Envios\NovoEnvio;
 use App\Livewire\Empresas\FontesDados\Index as FontesDadosIndex;
 use App\Livewire\Empresas\Index as EmpresasIndex;
 use App\Livewire\Empresas\Logs\Index as LogsIndex;
 use App\Livewire\Empresas\Show as EmpresasShow;
 use App\Livewire\Onboarding;
 use Illuminate\Support\Facades\Route;
-use App\Livewire\Empresas\Envios\NovoEnvio;
 
 Route::get('/', Onboarding::class)->name('onboarding');
 
