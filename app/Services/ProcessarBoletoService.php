@@ -33,7 +33,7 @@ class ProcessarBoletoService
         $resultados = [];
 
         foreach ($paginas as $caminhoPagina) {
-            $resultados[] = self::processarPagina($empresa, $parser, $caminhoPagina);
+            $resultados[] = self::processarPagina($empresa, $parser, $caminhoPagina, $grupo);
         }
 
         return $resultados;
@@ -43,7 +43,7 @@ class ProcessarBoletoService
      * Extrai os dados de uma única página já separada e tenta
      * identificar o cliente correspondente ao nome extraído.
      */
-    private static function processarPagina(Empresa $empresa, LayoutParserService $parser, string $caminhoPagina): array
+    private static function processarPagina(Empresa $empresa, LayoutParserService $parser, string $caminhoPagina, string $grupo): array
     {
         $caminhoCompleto = Storage::disk('public')->path($caminhoPagina);
         $dados = $parser->extrairDadosDaPagina($caminhoCompleto);
@@ -53,6 +53,7 @@ class ProcessarBoletoService
             : null;
 
         return [
+            'grupo' => $grupo,
             'caminho_arquivo' => $caminhoPagina,
             'nome_cliente_extraido' => $dados['nome_cliente'],
             'codigo_barras' => $dados['codigo_barras'],
