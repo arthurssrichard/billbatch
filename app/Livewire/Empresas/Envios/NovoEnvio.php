@@ -5,6 +5,7 @@ namespace App\Livewire\Empresas\Envios;
 use App\Models\Empresa;
 use App\Services\GerarBoletoFakeService;
 use Livewire\Component;
+use App\Services\ProcessarBoletoService;
 
 class NovoEnvio extends Component
 {
@@ -39,8 +40,9 @@ class NovoEnvio extends Component
 
     public function processar(): void
     {
-        // Substituído no próximo commit por ProcessarBoletoService de verdade
-        $this->resultadosProcessados = [];
+        $this->resultadosProcessados = collect($this->boletosBrutos)
+            ->flatMap(fn ($caminho, $grupo) => ProcessarBoletoService::processar($this->empresa, $caminho, $grupo))
+            ->toArray();
 
         $this->fase = 3;
     }
