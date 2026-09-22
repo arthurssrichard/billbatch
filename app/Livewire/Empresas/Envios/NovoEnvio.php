@@ -2,6 +2,8 @@
 
 namespace App\Livewire\Empresas\Envios;
 
+use App\Models\Cliente;
+use App\Models\Boleto;
 use App\Models\Empresa;
 use App\Services\GerarBoletoFakeService;
 use Livewire\Component;
@@ -50,6 +52,35 @@ class NovoEnvio extends Component
     public function voltar(): void
     {
         $this->fase = max(1, $this->fase - 1);
+    }
+
+    public function confirmarEnvio(): void
+    {
+        $criados = 0;
+        $ignorados = 0;
+
+        foreach ($this->resultadosProcessados as $resultado) {
+            if (! $resultado['cliente']) {
+                $ignorados++;
+                continue;
+            }
+
+            Cliente::find($resultado['cliente']['id'])->boletos()->create([
+                'empresa_id' => $this->empresa->id,
+                'codigo_barras' => $resultado['codigo_barras'],
+                'grupo' => $resultado['grupo'],
+                'caminho_arquivo' => $resultado['caminho_arquivo'],
+                'enviado' => false,
+                'pago' => false,
+                'data_emissao' => now(),
+            ]);
+
+            $criados++;
+        }
+
+        session()->flash('sucesso', "{$criados} boletos criados. {$ignorados} ignorados por falta de identificação.");
+
+        $this->redirectRoute('empresas.envios.index', $this->empresa);
     }
 
     private function contarPaginas(string $caminho): int

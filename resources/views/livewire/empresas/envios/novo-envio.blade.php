@@ -74,7 +74,17 @@
 
         {{-- Fase 3 --}}
         @if ($fase === 3)
-            <h2 class="font-sans font-semibold text-xl text-mist-50 mb-6">Boletos processados</h2>
+            <div class="flex items-center justify-between mb-6">
+                <h2 class="font-sans font-semibold text-xl text-mist-50 mb-6">Boletos processados</h2>
+                <button
+                    wire:click="confirmarEnvio"
+                    wire:confirm="Confirmar o envio destes boletos?"
+                    class="bg-amber-600 hover:bg-amber-500 text-mist-950 font-sans font-medium px-5 py-2 rounded-sm transition-colors"
+                >
+                    Confirmar envio
+                </button>
+            </div>
+            
 
             @foreach ($this->resultadosAgrupados as $grupo => $resultados)
                 <div class="mb-8">
