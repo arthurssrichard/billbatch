@@ -8,6 +8,7 @@ use App\Livewire\Empresas\Logs\Index as LogsIndex;
 use App\Livewire\Empresas\Show as EmpresasShow;
 use App\Livewire\Onboarding;
 use Illuminate\Support\Facades\Route;
+use App\Livewire\Empresas\Envios\NovoEnvio;
 
 Route::get('/', Onboarding::class)->name('onboarding');
 
@@ -17,3 +18,4 @@ Route::get('/empresas/{empresa}/clientes', ClientesIndex::class)->name('empresas
 Route::get('/empresas/{empresa}/logs', LogsIndex::class)->name('empresas.logs.index');
 Route::get('/empresas/{empresa}/fontes-dados', FontesDadosIndex::class)->name('empresas.fontes-dados.index');
 Route::get('/empresas/{empresa}/envios', EnviosIndex::class)->name('empresas.envios.index');
+Route::get('/empresas/{empresa}/envios/novo', NovoEnvio::class)->name('empresas.envios.novo');
