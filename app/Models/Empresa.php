@@ -7,6 +7,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Empresa extends Model
 {
@@ -63,5 +64,10 @@ class Empresa extends Model
         return $this->where($field ?? $this->getRouteKeyName(), $value)
             ->where('usuario_id', app(Usuario::class)->id)
             ->firstOrFail();
+    }
+
+    public function configuracaoParser(): HasOne
+    {
+        return $this->hasOne(ConfiguracaoParser::class);
     }
 }
