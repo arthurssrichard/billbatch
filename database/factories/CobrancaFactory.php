@@ -3,6 +3,7 @@
 namespace Database\Factories;
 
 use App\Enums\CanalCobranca;
+use App\Enums\CobrancaStatus;
 use App\Enums\TipoCobranca;
 use App\Models\Boleto;
 use App\Models\Cobranca;
@@ -28,6 +29,7 @@ class CobrancaFactory extends Factory
             },
             'tipo' => fake()->randomElement(TipoCobranca::cases()),
             'data_envio' => now(),
+            'status' => CobrancaStatus::ENVIADO,
         ];
     }
 }

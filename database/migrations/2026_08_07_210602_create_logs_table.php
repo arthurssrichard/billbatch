@@ -1,5 +1,6 @@
 <?php
 
+use App\Models\Cobranca;
 use App\Models\Empresa;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
@@ -15,6 +16,7 @@ return new class extends Migration
         Schema::create('logs', function (Blueprint $table) {
             $table->id();
             $table->foreignIdFor(Empresa::class)->constrained()->cascadeOnDelete();
+            $table->foreignIdFor(Cobranca::class)->nullable()->constrained()->nullOnDelete();
             $table->string('status'); // sucess, warning, info, error
             $table->string('arquivo_origem')->nullable();
             $table->string('nome');

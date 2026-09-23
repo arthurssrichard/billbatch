@@ -33,4 +33,9 @@ class Log extends Model
     {
         return $this->belongsTo(Empresa::class);
     }
+
+    public function cobranca(): BelongsTo
+    {
+        return $this->belongsTo(Cobranca::class);
+    }
 }

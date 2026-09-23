@@ -18,6 +18,7 @@ return new class extends Migration
             $table->string('canal_envio');
             $table->string('contatos_enviados');
             $table->string('tipo');
+            $table->string('status')->default('pendente');
             $table->datetime('data_envio');
             $table->timestamps();
         });
