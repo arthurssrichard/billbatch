@@ -20,7 +20,7 @@ return new class extends Migration
             $table->string('status'); // sucess, warning, info, error
             $table->string('arquivo_origem')->nullable();
             $table->string('nome');
-            $table->string('mensagem');
+            $table->longText('mensagem');
             $table->timestamps();
         });
     }
