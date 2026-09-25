@@ -1,16 +1,21 @@
 <?php
 
+use App\Enums\TipoCobranca;
 use App\Livewire\Empresas\Envios\NovoEnvio;
 use App\Models\Boleto;
 use App\Models\Cliente;
 use App\Models\ConfiguracaoParser;
+use App\Models\Email;
 use App\Models\Empresa;
+use App\Models\ModeloMensagemCobranca;
 use App\Models\Usuario;
 use Livewire\Livewire;
 
 test('fluxo completo do wizard: gera, processa e confirma envio', function () {
     $usuario = Usuario::factory()->create();
     $empresa = Empresa::factory()->create(['usuario_id' => $usuario->id]);
+    Email::factory()->create(['empresa_id' => $empresa->id]);
+    ModeloMensagemCobranca::factory()->create(['empresa_id' => $empresa->id, 'tipo' => TipoCobranca::PRIMEIRO_ENVIO]);
     ConfiguracaoParser::factory()->create(['empresa_id' => $empresa->id]);
 
     $cliente = Cliente::factory()->create([

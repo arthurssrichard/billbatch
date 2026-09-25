@@ -2,6 +2,11 @@
 
 namespace App\Livewire\Empresas\Envios;
 
+use App\Enums\CanalCobranca;
+use App\Enums\CobrancaStatus;
+use App\Enums\TipoCobranca;
+use App\Jobs\EnviarBoletoEmailJob;
+use App\Models\Boleto;
 use App\Models\Cliente;
 use App\Models\Empresa;
 use App\Services\GerarBoletoFakeService;
@@ -60,6 +65,10 @@ class NovoEnvio extends Component
         $criados = 0;
         $ignorados = 0;
 
+        $limiteHora = $this->empresa->email->limite_emails_hora ?? 100;
+        $segundosPorEnvio = 3600 / $limiteHora; // 36s quando limite = 100
+        $segundosAcumulados = 0;
+
         foreach ($this->resultadosProcessados as $resultado) {
             if (! $resultado['cliente']) {
                 $ignorados++;
@@ -67,7 +76,7 @@ class NovoEnvio extends Component
                 continue;
             }
 
-            Cliente::find($resultado['cliente']['id'])->boletos()->create([
+            $boleto = Cliente::find($resultado['cliente']['id'])->boletos()->create([
                 'empresa_id' => $this->empresa->id,
                 'codigo_barras' => $resultado['codigo_barras'],
                 'grupo' => $resultado['grupo'],
@@ -77,12 +86,32 @@ class NovoEnvio extends Component
                 'data_emissao' => now(),
             ]);
 
+            // Envia e incrementa segundos de throttle nos jobs
+            $segundosAcumulados = $this->enviarEmailParaCliente($boleto, $segundosPorEnvio, $segundosAcumulados);
+
             $criados++;
         }
 
         session()->flash('sucesso', "{$criados} boletos criados. {$ignorados} ignorados por falta de identificação.");
 
         $this->redirectRoute('empresas.envios.index', $this->empresa);
+    }
+
+    private function enviarEmailParaCliente(Boleto $boleto, float $segundosPorEnvio, float $segundosAcumulados)
+    {
+        $cobranca = $boleto->cobrancas()->create([
+            'canal_envio' => CanalCobranca::EMAIL,
+            'tipo' => TipoCobranca::PRIMEIRO_ENVIO,
+            'status' => CobrancaStatus::PENDENTE,
+        ]);
+
+        EnviarBoletoEmailJob::dispatch($cobranca)
+            ->delay(now()->addSeconds($segundosAcumulados));
+
+        $numeroDeEnvios = max($boleto->cliente->contatos()->count(), 1);
+        $segundosAcumulados += $segundosPorEnvio * $numeroDeEnvios;
+
+        return $segundosAcumulados;
     }
 
     private function contarPaginas(string $caminho): int
