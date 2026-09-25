@@ -40,9 +40,9 @@ class Empresa extends Model
         return $this->hasMany(ModeloMensagemCobranca::class);
     }
 
-    public function emails(): HasMany
+    public function email(): HasOne
     {
-        return $this->hasMany(Email::class);
+        return $this->hasOne(Email::class);
     }
 
     public function logs(): HasMany
