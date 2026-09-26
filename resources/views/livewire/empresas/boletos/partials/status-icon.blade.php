@@ -3,7 +3,11 @@
 @endphp
 
 @if (! $cobranca || $status === \App\Enums\CobrancaStatus::PENDENTE)
-    <span class="inline-block h-3.5 w-3.5 rounded-sm bg-mist-700" title="Aguardando envio"></span>
+    <div class="ripple-grid" title="Enviando...">
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+        <span></span><span></span><span></span>
+    </div>
 
 @elseif ($status === \App\Enums\CobrancaStatus::ENVIANDO)
     <div class="ripple-grid" title="Enviando...">

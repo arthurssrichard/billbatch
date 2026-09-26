@@ -32,11 +32,12 @@ class Index extends Component
                     'nome' => $nomeGrupo,
                     'data_inicio' => $datasEnvio->min(),
                     'data_fim' => $datasEnvio->max(),
+                    'data_criacao' => $boletosDoGrupo->min('created_at'),
                     'quantidade' => $boletosDoGrupo->count(),
                     'boletos' => $boletosDoGrupo,
                 ];
             })
-            ->sortByDesc(fn ($grupo) => $grupo['data_fim'] ?? $grupo['data_inicio'])
+            ->sortByDesc(fn ($grupo) => $grupo['data_criacao'])
             ->values();
     }
 
