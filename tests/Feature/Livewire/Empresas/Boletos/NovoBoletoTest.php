@@ -1,7 +1,7 @@
 <?php
 
 use App\Enums\TipoCobranca;
-use App\Livewire\Empresas\Envios\NovoEnvio;
+use App\Livewire\Empresas\Boletos\NovoBoleto;
 use App\Models\Boleto;
 use App\Models\Cliente;
 use App\Models\ConfiguracaoParser;
@@ -25,7 +25,7 @@ test('fluxo completo do wizard: gera, processa e confirma envio', function () {
     ]);
 
     Livewire::withCookie('visitor_token', $usuario->uuid)
-        ->test(NovoEnvio::class, ['empresa' => $empresa])
+        ->test(NovoBoleto::class, ['empresa' => $empresa])
         ->assertSet('fase', 1)
         ->call('simularEnvio')
         ->assertSet('fase', 2)
@@ -48,7 +48,7 @@ test('boletos sem cliente identificado não são persistidos', function () {
     Cliente::factory()->create(['empresa_id' => $empresa->id, 'grupo' => '150_10']);
 
     Livewire::withCookie('visitor_token', $usuario->uuid)
-        ->test(NovoEnvio::class, ['empresa' => $empresa])
+        ->test(NovoBoleto::class, ['empresa' => $empresa])
         ->call('simularEnvio')
         ->call('processar')
         ->call('confirmarEnvio');
@@ -63,7 +63,7 @@ test('voltar retorna para a fase anterior', function () {
     Cliente::factory()->create(['empresa_id' => $empresa->id, 'grupo' => '150_10']);
 
     Livewire::withCookie('visitor_token', $usuario->uuid)
-        ->test(NovoEnvio::class, ['empresa' => $empresa])
+        ->test(NovoBoleto::class, ['empresa' => $empresa])
         ->call('simularEnvio')
         ->assertSet('fase', 2)
         ->call('voltar')

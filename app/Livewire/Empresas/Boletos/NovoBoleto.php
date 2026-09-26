@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire\Empresas\Envios;
+namespace App\Livewire\Empresas\Boletos;
 
 use App\Enums\CanalCobranca;
 use App\Enums\CobrancaStatus;
@@ -15,7 +15,7 @@ use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 use setasign\Fpdi\Fpdi;
 
-class NovoEnvio extends Component
+class NovoBoleto extends Component
 {
     public Empresa $empresa;
 
@@ -94,7 +94,7 @@ class NovoEnvio extends Component
 
         session()->flash('sucesso', "{$criados} boletos criados. {$ignorados} ignorados por falta de identificação.");
 
-        $this->redirectRoute('empresas.envios.index', $this->empresa);
+        $this->redirectRoute('empresas.boletos.index', $this->empresa);
     }
 
     private function enviarEmailParaCliente(Boleto $boleto, float $segundosPorEnvio, float $segundosAcumulados)
@@ -130,6 +130,6 @@ class NovoEnvio extends Component
 
     public function render()
     {
-        return view('livewire.empresas.envios.novo-envio')->layout('components.layout', ['title' => 'Novo envio']);
+        return view('livewire.empresas.boletos.novo-boleto')->layout('components.layout', ['title' => 'Novo boleto']);
     }
 }
