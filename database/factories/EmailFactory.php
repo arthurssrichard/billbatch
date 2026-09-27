@@ -27,7 +27,7 @@ class EmailFactory extends Factory
 
         return [
             'empresa_id' => Empresa::factory(),
-            'limite_emails_hora' => fake()->randomELement([100, 150, 200, 300]),
+            'limite_emails_hora' => fake()->randomELement([5000]),
             'remetente_nome' => fake()->company(),
             'remetente_endereco' => fake()->safeEmail(),
             'remetente_senha' => fake()->password(),

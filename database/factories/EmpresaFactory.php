@@ -5,7 +5,6 @@ namespace Database\Factories;
 use App\Enums\TipoCobranca;
 use App\Models\Cliente;
 use App\Models\ConfiguracaoParser;
-use App\Models\Contato;
 use App\Models\Email;
 use App\Models\Empresa;
 use App\Models\Log;
@@ -34,8 +33,7 @@ class EmpresaFactory extends Factory
     public function completa(): static
     {
         return $this
-            ->has(Cliente::factory()->count(fake()->numberBetween(5, 30))
-                ->has(Contato::factory()->count(fake()->numberBetween(1, 5))))
+            ->has(Cliente::factory()->count(fake()->numberBetween(5, 30)))
             ->has(ModeloMensagemCobranca::factory(['tipo' => TipoCobranca::PRIMEIRO_ENVIO]))
             ->has(ModeloMensagemCobranca::factory(['tipo' => TipoCobranca::AVISO]))
             ->has(ModeloMensagemCobranca::factory(['tipo' => TipoCobranca::COBRANCA]))

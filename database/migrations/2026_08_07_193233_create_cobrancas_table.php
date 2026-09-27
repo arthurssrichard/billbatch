@@ -16,9 +16,10 @@ return new class extends Migration
             $table->id();
             $table->foreignIdFor(Boleto::class)->contrained()->cascadeOnDelete();
             $table->string('canal_envio');
-            $table->string('contatos_enviados');
+            $table->string('contatos_enviados')->nullable();
             $table->string('tipo');
-            $table->datetime('data_envio');
+            $table->string('status')->default('pendente');
+            $table->datetime('data_envio')->nullable();
             $table->timestamps();
         });
     }

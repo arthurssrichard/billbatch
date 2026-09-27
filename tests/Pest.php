@@ -4,6 +4,7 @@ use App\Http\Middleware\VerifyVisitorToken;
 use App\Models\Empresa;
 use App\Models\Usuario;
 use Illuminate\Foundation\Testing\RefreshDatabase;
+use Illuminate\Support\Facades\Queue;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Storage;
 use Tests\TestCase;
@@ -21,6 +22,10 @@ use Tests\TestCase;
 
 pest()->extend(TestCase::class)
     ->use(RefreshDatabase::class)
+    ->beforeEach(function () {
+        Queue::fake();
+        Storage::fake('public');
+    })
     ->in('Feature', 'Unit');
 
 /*
@@ -70,7 +75,3 @@ function assertScopeIsolaPorUsuario(string $rota, callable $criarRegistro, strin
         ->and($respostaB['ids'])->toHaveCount($respostaB['quantidade_esperada'])
         ->and($respostaA['ids'])->not->toEqualCanonicalizing($respostaB['ids']);
 }
-
-uses(RefreshDatabase::class)->beforeEach(function () {
-    Storage::fake('public');
-})->in('Feature');

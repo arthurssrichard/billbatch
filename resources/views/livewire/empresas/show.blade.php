@@ -5,7 +5,7 @@
         <div class="grid grid-cols-1 sm:grid-cols-1 lg:grid-cols-3 gap-4">
             @php
                 $cards = [
-                    ['label' => 'Envios', 'route' => 'empresas.envios.index'],
+                    ['label' => 'Envios', 'route' => 'empresas.boletos.index'],
                     ['label' => 'Fontes de dados', 'route' => 'empresas.fontes-dados.index'],
                     ['label' => 'Clientes', 'route' => 'empresas.clientes.index'],
                     ['label' => 'Logs', 'route' => 'empresas.logs.index'],

@@ -1,5 +1,6 @@
 services:
   billbatch:
+    image: billbatch-app:latest
     container_name: billbatch
     build:
       context: .
@@ -20,9 +21,9 @@ services:
         condition: service_healthy
     command: >
       sh -c "rm -f public/storage &&
-             php artisan storage:link &&
-             php artisan migrate --force &&"
-
+            php artisan storage:link &&
+            php artisan migrate --force &&
+            apache2-foreground"
   mysql:
     container_name: mysql
     image: mysql:8.0
@@ -58,6 +59,35 @@ services:
       timeout: 5s
       retries: 5
   
+  horizon:
+    container_name: horizon
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: billbatch-app:latest
+    restart: unless-stopped
+    networks:
+      - rede_interna
+    healthcheck:
+      test: ["CMD", "php", "artisan", "horizon:status"]
+      start_period: 10s
+      interval: 5s
+      timeout: 5s
+      retries: 5
+    env_file:
+      - .env
+    volumes:
+      - .:/var/www/html
+    depends_on:
+      billbatch:
+        condition: service_started
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    entrypoint: []
+    command: php artisan horizon
+
   mailpit:
     image: axllent/mailpit:v1.30.6
     ports:

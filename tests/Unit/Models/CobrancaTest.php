@@ -1,6 +1,7 @@
 <?php
 
 use App\Enums\CanalCobranca;
+use App\Enums\CobrancaStatus;
 use App\Enums\TipoCobranca;
 use App\Models\Cobranca;
 use Illuminate\Support\Carbon;
@@ -18,4 +19,9 @@ test('tipo é do tipo enum', function () {
 test('data_envio é convertido para datetime', function () {
     $cobranca = Cobranca::factory()->create();
     expect($cobranca->data_envio)->toBeInstanceOf(Carbon::class);
+});
+
+test('status é do tipo enum', function () {
+    $cobranca = Cobranca::factory()->create();
+    expect($cobranca->status)->toBeInstanceOf(CobrancaStatus::class);
 });

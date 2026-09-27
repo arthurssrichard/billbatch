@@ -14,3 +14,36 @@
 main {
     @apply p-6 sm:p-10 lg:p-16;
 }
+
+@keyframes ripple-grid {
+    0%, 100% { transform: scale(1); opacity: 1; }
+    50% { transform: scale(0.35); opacity: 0.35; }
+}
+
+.ripple-grid {
+    display: grid;
+    border-radius: 1.5px;
+    overflow: hidden;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    gap: 1.6px;
+    width: 14px;
+    height: 14px;
+}
+
+.ripple-grid span {
+    display: block;
+    border-radius: 0px;
+    background-color: theme('colors.amber.400');
+    animation: ripple-grid 2s ease-in-out infinite;
+}
+
+.ripple-grid span:nth-child(1) { animation-delay: 0s; }
+.ripple-grid span:nth-child(2) { animation-delay: 0.1s; }
+.ripple-grid span:nth-child(3) { animation-delay: 0.2s; }
+.ripple-grid span:nth-child(4) { animation-delay: 0.1s; }
+.ripple-grid span:nth-child(5) { animation-delay: 0.2s; }
+.ripple-grid span:nth-child(6) { animation-delay: 0.3s; }
+.ripple-grid span:nth-child(7) { animation-delay: 0.2s; }
+.ripple-grid span:nth-child(8) { animation-delay: 0.3s; }
+.ripple-grid span:nth-child(9) { animation-delay: 0.4s; }

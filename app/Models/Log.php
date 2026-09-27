@@ -14,7 +14,7 @@ class Log extends Model
     use HasFactory;
     use PertenceAoUsuarioAtual;
 
-    protected $fillable = ['status', 'arquivo_origem', 'nome', 'mensagem'];
+    protected $fillable = ['cobranca_id', 'status', 'arquivo_origem', 'nome', 'mensagem'];
 
     protected function casts(): array
     {
@@ -32,5 +32,10 @@ class Log extends Model
     public function empresa(): BelongsTo
     {
         return $this->belongsTo(Empresa::class);
+    }
+
+    public function cobranca(): BelongsTo
+    {
+        return $this->belongsTo(Cobranca::class);
     }
 }

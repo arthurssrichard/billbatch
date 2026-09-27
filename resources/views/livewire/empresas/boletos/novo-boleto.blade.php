@@ -1,7 +1,7 @@
 <div>
     <x-breadcrumb-header :trail="[
         ['label' => $empresa->nome, 'url' => route('empresas.show', $empresa)],
-        ['label' => 'Envios', 'url' => route('empresas.envios.index', $empresa)],
+        ['label' => 'Envios', 'url' => route('empresas.boletos.index', $empresa)],
         ['label' => 'Novo envio'],
     ]" />
 

@@ -5,7 +5,7 @@ namespace App\Models;
 use App\Models\Concerns\PertenceAoUsuarioAtual;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
-use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\belongsTo;
 use Override;
 
 class Email extends Model
@@ -37,8 +37,13 @@ class Email extends Model
         return 'empresa';
     }
 
-    public function empresa(): BelongsTo
+    public function empresa(): belongsTo
     {
         return $this->belongsTo(Empresa::class);
+    }
+
+    public function intervaloEnvioSegundos(): float
+    {
+        return 3600 / ($this->limite_emails_hora ?? 100);
     }
 }
