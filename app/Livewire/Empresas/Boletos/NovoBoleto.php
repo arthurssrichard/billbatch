@@ -35,11 +35,15 @@ class NovoBoleto extends Component
         $this->boletosBrutos = GerarBoletoFakeService::gerarDeTodosClientes($this->empresa);
 
         $this->cardsGrupos = collect($this->boletosBrutos)
-            ->map(fn ($caminho, $grupo) => [
-                'grupo' => $grupo,
-                'caminho' => $caminho,
-                'paginas' => $this->contarPaginas($caminho),
-            ])
+            ->map(function ($caminho) {
+                $grupo = pathinfo($caminho, PATHINFO_FILENAME); // "OUT 26 150_10"
+
+                return [
+                    'grupo' => $grupo,
+                    'caminho' => $caminho,
+                    'paginas' => $this->contarPaginas($caminho),
+                ];
+            })
             ->values()
             ->toArray();
 
@@ -48,8 +52,8 @@ class NovoBoleto extends Component
 
     public function processar(): void
     {
-        $this->resultadosProcessados = collect($this->boletosBrutos)
-            ->flatMap(fn ($caminho, $grupo) => ProcessarBoletoService::processar($this->empresa, $caminho, $grupo))
+        $this->resultadosProcessados = collect($this->cardsGrupos)
+            ->flatMap(fn ($card) => ProcessarBoletoService::processar($this->empresa, $card['caminho'], $card['grupo']))
             ->toArray();
 
         $this->fase = 3;
