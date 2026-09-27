@@ -34,8 +34,7 @@ class EmpresaFactory extends Factory
     public function completa(): static
     {
         return $this
-            ->has(Cliente::factory()->count(fake()->numberBetween(5, 30))
-                ->has(Contato::factory()->count(fake()->numberBetween(1, 3))))
+            ->has(Cliente::factory()->count(fake()->numberBetween(5, 30)))
             ->has(ModeloMensagemCobranca::factory(['tipo' => TipoCobranca::PRIMEIRO_ENVIO]))
             ->has(ModeloMensagemCobranca::factory(['tipo' => TipoCobranca::AVISO]))
             ->has(ModeloMensagemCobranca::factory(['tipo' => TipoCobranca::COBRANCA]))
