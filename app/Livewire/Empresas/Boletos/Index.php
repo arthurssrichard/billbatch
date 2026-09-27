@@ -2,10 +2,10 @@
 
 namespace App\Livewire\Empresas\Boletos;
 
-use App\Models\Empresa;
-use Livewire\Component;
-use Livewire\Attributes\Computed;
 use App\Enums\CobrancaStatus;
+use App\Models\Empresa;
+use Livewire\Attributes\Computed;
+use Livewire\Component;
 
 class Index extends Component
 {

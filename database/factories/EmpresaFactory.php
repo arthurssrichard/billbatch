@@ -5,7 +5,6 @@ namespace Database\Factories;
 use App\Enums\TipoCobranca;
 use App\Models\Cliente;
 use App\Models\ConfiguracaoParser;
-use App\Models\Contato;
 use App\Models\Email;
 use App\Models\Empresa;
 use App\Models\Log;

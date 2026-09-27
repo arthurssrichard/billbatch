@@ -1,9 +1,9 @@
 <?php
 
-use App\Livewire\Empresas\Clientes\Index as ClientesIndex;
 use App\Livewire\Empresas\Boletos\Index as BoletosIndex;
 use App\Livewire\Empresas\Boletos\NovoBoleto;
 use App\Livewire\Empresas\Boletos\ShowBoleto;
+use App\Livewire\Empresas\Clientes\Index as ClientesIndex;
 use App\Livewire\Empresas\FontesDados\Index as FontesDadosIndex;
 use App\Livewire\Empresas\Index as EmpresasIndex;
 use App\Livewire\Empresas\Logs\Index as LogsIndex;
