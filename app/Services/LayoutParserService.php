@@ -18,9 +18,7 @@ class LayoutParserService
      */
     public function extrairDadosDaPagina(string $caminhoPdfPagina): array
     {
-        $parser = new PdfTextParser;
-        $pdf = $parser->parseFile($caminhoPdfPagina);
-        $texto = $pdf->getText();
+        $texto = $this->extrairTextoDaPagina($caminhoPdfPagina);
 
         $nomeCliente = $this->extrair($texto, $this->config->regex_nome_cliente);
         $codigoBarras = $this->extrair($texto, $this->config->regex_codigo_barras);
@@ -36,6 +34,18 @@ class LayoutParserService
             'nome_cliente' => $nomeCliente,
             'codigo_barras' => $codigoBarras,
         ];
+    }
+
+    /**
+     * Converte o PDF de uma página em texto bruto, sem aplicar nenhum regex.
+     * Existe separado pra permitir mostrar esse passo intermediário na UI da view "configuracao-parser".
+     */
+    public function extrairTextoDaPagina(string $caminhoPdfPagina): string
+    {
+        $parser = new PdfTextParser;
+        $pdf = $parser->parseFile($caminhoPdfPagina);
+
+        return $pdf->getText();
     }
 
     /**

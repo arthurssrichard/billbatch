@@ -7,6 +7,7 @@ use App\Models\Empresa;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Picqer\Barcode\Renderers\PngRenderer;
 use Picqer\Barcode\Types\TypeCode128;
 
@@ -159,5 +160,44 @@ class GerarBoletoFakeService
             'valor' => $valor,
             'vencimento' => $vencimento,
         ];
+    }
+
+    /**
+     * Gera um único boleto de teste em PDF (página única) para um cliente
+     * aleatório da empresa, usado apenas pela tela de configuração do parser.
+     * Apaga qualquer teste anterior da mesma empresa antes de gerar um novo.
+     */
+    public static function gerarBoletoTeste(Empresa $empresa): ?string
+    {
+        $cliente = Cliente::query()
+            ->where('empresa_id', $empresa->id)
+            ->inRandomOrder()
+            ->first();
+
+        if (! $cliente) {
+            return null;
+        }
+
+        $pastaEmpresa = "boletos_teste_parser/{$empresa->id}";
+        Storage::disk('public')->deleteDirectory($pastaEmpresa);
+
+        $dadosGrupo = self::extrairDadosGrupo($cliente->grupo);
+        $barcode = self::gerarCodigoBarras();
+
+        $pdf = Pdf::loadView('pdfs.boleto_template', [
+            'boletos' => [[
+                'codigo_barras' => $barcode['codigo'],
+                'barcode_base64' => $barcode['base64'],
+                'nome_cliente' => $cliente->nome,
+                'vencimento' => $dadosGrupo['vencimento'],
+                'valor' => $dadosGrupo['valor'],
+            ]],
+        ]);
+
+        $caminho = "{$pastaEmpresa}/".Str::random(20).'.pdf';
+
+        Storage::disk('public')->put($caminho, $pdf->output());
+
+        return $caminho;
     }
 }
