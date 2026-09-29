@@ -7,7 +7,6 @@ use App\Mail\CobrancaMail;
 use App\Models\Boleto;
 use App\Models\Cobranca;
 use App\Models\Empresa;
-use App\Models\Log;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Storage;
 
@@ -45,5 +44,39 @@ test('marca a cobrança como enviada e preenche data_envio/contatos_enviados', f
     $enderecos = $cliente->contatos->pluck('endereco_email')->all();
     Mail::assertSent(CobrancaMail::class, function ($mail) use ($enderecos) {
         return $mail->hasTo($enderecos) && count($mail->attachments()) === 1;
+    });
+});
+
+test('substitui os placeholders tanto no assunto quanto no corpo do e-mail', function () {
+    Mail::fake();
+
+    $empresa = Empresa::factory()->completa()->create();
+    $cliente = $empresa->clientes()->first();
+    $cliente->update(['canais_envio' => ['email'], 'nome' => 'Maria Fernandes']);
+
+    Storage::disk('public')->put('boletos/teste.pdf', 'conteudo fake');
+
+    $boleto = Boleto::factory()->create([
+        'cliente_id' => $cliente->id,
+        'empresa_id' => $empresa->id,
+        'caminho_arquivo' => 'boletos/teste.pdf',
+    ]);
+
+    $cobranca = Cobranca::factory()->create([
+        'boleto_id' => $boleto->id,
+        'tipo' => TipoCobranca::PRIMEIRO_ENVIO,
+        'status' => CobrancaStatus::PENDENTE,
+    ]);
+
+    $empresa->modeloMensagemCobrancas()
+        ->where('tipo', TipoCobranca::PRIMEIRO_ENVIO)
+        ->update(['assunto' => 'Boleto para {NOME_CLIENTE}']);
+
+    (new EnviarBoletoEmailJob($cobranca))->handle();
+
+    Mail::assertSent(CobrancaMail::class, function ($mail) {
+        $mail->assertHasSubject('Boleto para Maria Fernandes');
+
+        return true;
     });
 });

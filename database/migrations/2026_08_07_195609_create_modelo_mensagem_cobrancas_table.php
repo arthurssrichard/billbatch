@@ -17,7 +17,7 @@ return new class extends Migration
             $table->foreignIdFor(Empresa::class)->constrained()->cascadeOnDelete();
             $table->string('tipo'); // Primeiro envio, aviso, cobranca, etc
             $table->string('assunto');
-            $table->string('corpo');
+            $table->text('corpo');
             $table->timestamps();
         });
     }
