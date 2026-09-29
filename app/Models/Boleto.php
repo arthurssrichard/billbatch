@@ -21,6 +21,7 @@ class Boleto extends Model
     {
         return [
             'data_emissao' => 'datetime',
+            'pago' => 'boolean',
         ];
     }
 
