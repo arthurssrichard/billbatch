@@ -75,7 +75,7 @@ class EnviarBoletoEmailJob implements ShouldQueue
         // Se tudo certo, envia o e-mail
         $enderecos = $this->cliente->contatos->pluck('endereco_email')->all();
         Mail::to($enderecos)->send(new CobrancaMail(
-            $this->modeloMensagemCobranca->assunto,
+            SubstituirPlaceholdersService::substituir($this->modeloMensagemCobranca->assunto, $this->cobranca->boleto),
             SubstituirPlaceholdersService::substituir($this->modeloMensagemCobranca->corpo, $this->cobranca->boleto),
             $this->cobranca->boleto->caminho_arquivo,
         ));
