@@ -52,6 +52,15 @@ class Index extends Component
             ->exists();
     }
 
+    public function togglePago(int $boletoId): void
+    {
+        $boleto = $this->empresa->boletos()->findOrFail($boletoId);
+
+        $boleto->update(['pago' => ! $boleto->pago]);
+
+        unset($this->grupos);
+    }
+
     public function render()
     {
         return view('livewire.empresas.boletos.index')->layout('components.layout', ['title' => 'Boletos']);

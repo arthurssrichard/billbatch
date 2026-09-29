@@ -40,7 +40,7 @@
                                     @include('livewire.empresas.boletos.partials.status-icon', ['cobranca' => $boleto->ultimaCobranca])
                                 </td>
                                 <td class="px-4 py-2">
-                                    {{-- toggle de pago, igual já existe em algum lugar do app --}}
+                                    <x-toggle :checked="$boleto->pago" wire:click="togglePago({{ $boleto->id }})" />
                                 </td>
                                 <td class="px-4 py-2">
                                     <a href="{{ route('empresas.boletos.show', [$empresa, $boleto]) }}" class="text-amber-600">Cobranças</a>
