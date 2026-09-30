@@ -15,7 +15,7 @@ class Boleto extends Model
     use HasFactory;
     use PertenceAoUsuarioAtual;
 
-    protected $fillable = ['empresa_id', 'codigo_barras', 'grupo', 'caminho_arquivo', 'enviado', 'pago', 'data_emissao'];
+    protected $fillable = ['empresa_id', 'codigo_barras', 'grupo', 'caminho_arquivo', 'pago', 'data_emissao'];
 
     protected function casts(): array
     {

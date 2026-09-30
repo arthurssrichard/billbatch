@@ -4,7 +4,6 @@ namespace App\Jobs;
 
 use App\Enums\CobrancaStatus;
 use App\Enums\LogStatus;
-use App\Enums\TipoCobranca;
 use App\Mail\CobrancaMail;
 use App\Models\Boleto;
 use App\Models\Cliente;
@@ -52,6 +51,7 @@ class EnviarBoletoEmailJob implements ShouldQueue
      */
     public function handle(): void
     {
+        $this->boleto->update(['enviado' => true]);
         $this->cobranca->update(['status' => CobrancaStatus::ENVIANDO]);
         // Guard functions
         if ($this->cobranca->boleto->cliente->contatos()->count() === 0) {
@@ -85,10 +85,6 @@ class EnviarBoletoEmailJob implements ShouldQueue
             'data_envio' => now(),
             'contatos_enviados' => implode(';', $enderecos),
         ]);
-
-        if ($this->cobranca->tipo === TipoCobranca::PRIMEIRO_ENVIO) {
-            $this->boleto->update(['enviado' => true]);
-        }
 
         $enderecosEmTexto = implode(', ', $enderecos);
         $this->empresa->logs()->create([
