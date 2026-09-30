@@ -76,7 +76,11 @@
                 <tbody>
                     @forelse ($clientes as $cliente)
                         <tr class="border-b border-mist-800/50">
-                            <td class="px-4 py-3 text-mist-100">{{ $cliente->nome }}</td>
+                            <td class="px-4 py-3 text-mist-100">
+                                <a href="{{ route('empresas.clientes.show', [$empresa, $cliente]) }}" class="hover:text-amber-500">
+                                    {{ $cliente->nome }}
+                                </a>
+                            </td>
                             <td class="px-4 py-3 text-mist-400">{{ $cliente->identificador_externo }}</td>
                             <td class="px-4 py-3 text-mist-400">{{ $cliente->grupo ?? '—' }}</td>
                             <td class="px-4 py-3">

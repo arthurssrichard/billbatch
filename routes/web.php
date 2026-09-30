@@ -4,6 +4,7 @@ use App\Livewire\Empresas\Boletos\Index as BoletosIndex;
 use App\Livewire\Empresas\Boletos\NovoBoleto;
 use App\Livewire\Empresas\Boletos\ShowBoleto;
 use App\Livewire\Empresas\Clientes\Index as ClientesIndex;
+use App\Livewire\Empresas\Clientes\Show as ClienteShow;
 use App\Livewire\Empresas\ConfiguracaoParser;
 use App\Livewire\Empresas\FontesDados\Index as FontesDadosIndex;
 use App\Livewire\Empresas\Index as EmpresasIndex;
@@ -25,3 +26,4 @@ Route::get('/empresas/{empresa}/boletos/novo', NovoBoleto::class)->name('empresa
 Route::get('/empresas/{empresa}/boletos/{boleto}', ShowBoleto::class)->name('empresas.boletos.show');
 Route::get('/empresas/{empresa}/configuracao-parser', ConfiguracaoParser::class)->name('empresas.configuracao-parser');
 Route::get('/empresas/{empresa}/modelos-mensagem', ModelosMensagem::class)->name('empresas.modelos-mensagem');
+Route::get('/empresas/{empresa}/clientes/{cliente}', ClienteShow::class)->name('empresas.clientes.show');

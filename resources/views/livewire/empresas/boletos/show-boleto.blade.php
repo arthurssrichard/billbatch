@@ -10,7 +10,10 @@
             {{-- Cabeçalho do boleto --}}
             <div class="sticky top-0 z-10 flex flex-col gap-3 border-b border-mist-800 bg-mist-900 px-4 py-3 sm:flex-row sm:items-center sm:justify-between">
                 <div>
-                    <h3 class="font-mono text-sm font-semibold">{{ $boleto->cliente->nome }}</h3>
+                
+                    <a href="{{ route('empresas.clientes.show', [$empresa, $boleto->cliente->id]) }}">
+                        <h3 class="font-mono text-sm font-semibold hover:underline">{{ $boleto->cliente->nome }}</h3>
+                    </a>
                     <p class="text-xs text-mist-500">Código de barras: {{ $boleto->codigo_barras }}</p>
                 </div>
 

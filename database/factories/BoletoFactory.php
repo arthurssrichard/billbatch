@@ -28,7 +28,6 @@ class BoletoFactory extends Factory
             'caminho_arquivo' => function (array $attributes) {
                 return 'boletos/'.$attributes['grupo'].'/'.fake()->company().'.pdf';
             },
-            'enviado' => fake()->boolean(),
             'pago' => fake()->boolean(),
             'data_emissao' => fake()->dateTimeThisYear()->format('Y-m-d'),
         ];
