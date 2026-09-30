@@ -5,7 +5,9 @@ namespace App\Livewire\Empresas\Clientes;
 use App\Enums\CanalCobranca;
 use App\Models\Cliente;
 use App\Models\Empresa;
+use Illuminate\Validation\ValidationException;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 class Show extends Component
@@ -14,16 +16,23 @@ class Show extends Component
 
     public Cliente $cliente;
 
+    #[Validate('required', onUpdate: false)]
     public string $nome = '';
 
+    #[Validate('required', onUpdate: false)]
     public string $identificadorExterno = '';
 
+    #[Validate('required', onUpdate: false)]
     public ?string $grupo = null;
 
+    #[Validate('required', onUpdate: false)]
     public string $cnpj = '';
 
     public array $canaisEnvio = [];
 
+    #[Validate([
+        'contatos.*.endereco_email' => ['email'],
+    ], onUpdate: false)]
     public array $contatos = [];
 
     public function mount(Empresa $empresa, Cliente $cliente): void
@@ -44,18 +53,25 @@ class Show extends Component
 
         $this->contatos = $cliente->contatos()
             ->get()
-            ->map(fn ($contato) => ['id' => $contato->id, 'endereco_email' => $contato->endereco_email])
+            ->map(fn ($contato) => [
+                'id' => $contato->id,
+                'endereco_email' => $contato->endereco_email,
+            ])
             ->toArray();
     }
 
     public function adicionarContato(): void
     {
-        $this->contatos[] = ['id' => null, 'endereco_email' => ''];
+        $this->contatos[] = [
+            'id' => null,
+            'endereco_email' => '',
+        ];
     }
 
     public function removerContato(int $index): void
     {
         unset($this->contatos[$index]);
+
         $this->contatos = array_values($this->contatos);
     }
 
@@ -66,19 +82,30 @@ class Show extends Component
             fn ($contato) => filled($contato['endereco_email']),
         ));
 
-        $this->validate([
-            'contatos.*.endereco_email' => ['email'],
-        ]);
+        try {
+            $this->validate();
+        } catch (ValidationException $e) {
+            $this->exibirErroValidacao($e);
+
+            return;
+        }
 
         $this->cliente->update([
             'nome' => $this->nome,
             'identificador_externo' => $this->identificadorExterno,
             'grupo' => $this->grupo,
             'cnpj' => $this->cnpj,
-            'canais_envio' => collect($this->canaisEnvio)->filter()->keys()->values()->toArray(),
+            'canais_envio' => collect($this->canaisEnvio)
+                ->filter()
+                ->keys()
+                ->values()
+                ->toArray(),
         ]);
 
-        $idsExistentes = collect($this->contatos)->pluck('id')->filter()->all();
+        $idsExistentes = collect($this->contatos)
+            ->pluck('id')
+            ->filter()
+            ->all();
 
         $this->cliente->contatos()
             ->whereNotIn('id', $idsExistentes)
@@ -92,17 +119,46 @@ class Show extends Component
             if ($contato['id']) {
                 $this->cliente->contatos()
                     ->where('id', $contato['id'])
-                    ->update(['endereco_email' => $contato['endereco_email']]);
+                    ->update([
+                        'endereco_email' => $contato['endereco_email'],
+                    ]);
             } else {
-                $this->cliente->contatos()->create(['endereco_email' => $contato['endereco_email']]);
+                $this->cliente->contatos()->create([
+                    'endereco_email' => $contato['endereco_email'],
+                ]);
             }
         }
 
-        // recarrega os contatos já com ids definidos, pra não perder o vínculo se salvar de novo
+        // Recarrega os contatos já com os IDs definidos.
         $this->contatos = $this->cliente->contatos()
             ->get()
-            ->map(fn ($contato) => ['id' => $contato->id, 'endereco_email' => $contato->endereco_email])
+            ->map(fn ($contato) => [
+                'id' => $contato->id,
+                'endereco_email' => $contato->endereco_email,
+            ])
             ->toArray();
+    }
+
+    private function exibirErroValidacao(ValidationException $e): void
+    {
+        $campo = $e->validator->errors()->keys()[0];
+        $valor = data_get($this, $campo);
+
+        $nomeCampo = match (true) {
+            $campo === 'nome' => 'nome',
+            $campo === 'identificadorExterno' => 'identificador externo',
+            $campo === 'grupo' => 'grupo',
+            $campo === 'cnpj' => 'CNPJ',
+            str_starts_with($campo, 'contatos.')
+                => 'e-mail',
+            default => 'campo',
+        };
+
+        $this->dispatch(
+            'toast',
+            tipo: 'erro',
+            mensagem: "O valor '{$valor}' não é um {$nomeCampo} válido."
+        );
     }
 
     #[Computed]
@@ -117,6 +173,9 @@ class Show extends Component
 
     public function render()
     {
-        return view('livewire.empresas.clientes.show')->layout('components.layout', ['title' => $this->cliente->nome]);
+        return view('livewire.empresas.clientes.show')
+            ->layout('components.layout', [
+                'title' => $this->cliente->nome,
+            ]);
     }
 }
