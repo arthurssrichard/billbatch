@@ -6,7 +6,6 @@
             @php
                 $cards = [
                     ['label' => 'Envios', 'route' => 'empresas.boletos.index'],
-                    ['label' => 'Fontes de dados', 'route' => 'empresas.fontes-dados.index'],
                     ['label' => 'Clientes', 'route' => 'empresas.clientes.index'],
                     ['label' => 'Logs', 'route' => 'empresas.logs.index'],
                     ['label' => 'Modelos de mensagem de email', 'route' => 'empresas.modelos-mensagem'],
