@@ -21,6 +21,7 @@ trait ValidatesWithToast
 
             return true;
         } catch (ValidationException $e) {
+            // dd($e);
             $campoComErro = $e->validator->errors()->keys()[0];
 
             $valor = data_get($this, $campoComErro);

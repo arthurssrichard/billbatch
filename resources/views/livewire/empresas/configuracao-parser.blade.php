@@ -27,7 +27,6 @@
                         rows="3"
                         class="w-full bg-mist-900 border border-mist-800 rounded-sm p-3 font-mono text-sm text-mist-100 focus:outline-none focus:border-amber-700"
                     ></textarea>
-                    @error('regexNomeCliente') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
 
                 <div>
@@ -37,7 +36,6 @@
                         rows="3"
                         class="w-full bg-mist-900 border border-mist-800 rounded-sm p-3 font-mono text-sm text-mist-100 focus:outline-none focus:border-amber-700"
                     ></textarea>
-                    @error('regexCodigoBarras') <p class="text-red-400 text-xs mt-1">{{ $message }}</p> @enderror
                 </div>
 
                 <div class="flex items-center gap-3">

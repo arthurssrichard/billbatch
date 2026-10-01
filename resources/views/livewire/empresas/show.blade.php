@@ -9,6 +9,7 @@
                     ['label' => 'Clientes', 'route' => 'empresas.clientes.index'],
                     ['label' => 'Logs', 'route' => 'empresas.logs.index'],
                     ['label' => 'Modelos de mensagem de email', 'route' => 'empresas.modelos-mensagem'],
+                    ['label' => 'Parser de boletos', 'route' => 'empresas.configuracao-parser'],
                 ];
             @endphp
 
