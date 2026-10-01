@@ -5,13 +5,15 @@ namespace App\Livewire\Empresas\Clientes;
 use App\Enums\CanalCobranca;
 use App\Models\Cliente;
 use App\Models\Empresa;
-use Illuminate\Validation\ValidationException;
+use App\Traits\ValidatesWithToast;
 use Livewire\Attributes\Computed;
 use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 class Show extends Component
 {
+    use ValidatesWithToast;
+
     public Empresa $empresa;
 
     public Cliente $cliente;
@@ -31,7 +33,7 @@ class Show extends Component
     public array $canaisEnvio = [];
 
     #[Validate([
-        'contatos.*.endereco_email' => ['email'],
+        'contatos.*.endereco_email' => ['email', 'required'],
     ], onUpdate: false)]
     public array $contatos = [];
 
@@ -77,16 +79,13 @@ class Show extends Component
 
     public function salvarAlteracoes(): void
     {
-        $this->contatos = array_values(array_filter(
-            $this->contatos,
-            fn ($contato) => filled($contato['endereco_email']),
-        ));
-
-        try {
-            $this->validate();
-        } catch (ValidationException $e) {
-            $this->exibirErroValidacao($e);
-
+        if (! $this->validateWithToast([
+            'nome' => 'nome',
+            'identificadorExterno' => 'identificador externo',
+            'grupo' => 'grupo',
+            'cnpj' => 'CNPJ',
+            'contatos\.\d+\.endereco_email' => 'e-mail',
+        ], 'Cliente')) {
             return;
         }
 
@@ -137,28 +136,6 @@ class Show extends Component
                 'endereco_email' => $contato->endereco_email,
             ])
             ->toArray();
-    }
-
-    private function exibirErroValidacao(ValidationException $e): void
-    {
-        $campo = $e->validator->errors()->keys()[0];
-        $valor = data_get($this, $campo);
-
-        $nomeCampo = match (true) {
-            $campo === 'nome' => 'nome',
-            $campo === 'identificadorExterno' => 'identificador externo',
-            $campo === 'grupo' => 'grupo',
-            $campo === 'cnpj' => 'CNPJ',
-            str_starts_with($campo, 'contatos.')
-                => 'e-mail',
-            default => 'campo',
-        };
-
-        $this->dispatch(
-            'toast',
-            tipo: 'erro',
-            mensagem: "O valor '{$valor}' não é um {$nomeCampo} válido."
-        );
     }
 
     #[Computed]
