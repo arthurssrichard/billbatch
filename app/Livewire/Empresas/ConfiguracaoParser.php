@@ -7,11 +7,14 @@ use App\Models\ConfiguracaoParser as ConfiguracaoParserModel;
 use App\Models\Empresa;
 use App\Services\GerarBoletoFakeService;
 use App\Services\LayoutParserService;
+use App\Traits\ValidatesWithToast;
 use Illuminate\Support\Facades\Storage;
 use Livewire\Component;
 
 class ConfiguracaoParser extends Component
 {
+    use ValidatesWithToast;
+
     public Empresa $empresa;
 
     public string $regexNomeCliente = '';
@@ -56,7 +59,12 @@ class ConfiguracaoParser extends Component
 
     public function salvar(): void
     {
-        $this->validate($this->regrasDeValidacao());
+        if (! $this->validateWithToast([
+            'regexNomeCliente' => 'regex',
+            'regexCodigoBarras' => 'regex',
+        ], 'Parser')) {
+            return;
+        }
 
         $this->empresa->configuracaoParser()->updateOrCreate(
             [],
@@ -77,7 +85,12 @@ class ConfiguracaoParser extends Component
 
     public function testar(): void
     {
-        $this->validate($this->regrasDeValidacao());
+        if (! $this->validateWithToast([
+            'regexNomeCliente' => 'regex',
+            'regexCodigoBarras' => 'regex',
+        ], 'Parser')) {
+            return;
+        }
 
         $caminho = GerarBoletoFakeService::gerarBoletoTeste($this->empresa);
 
@@ -135,7 +148,7 @@ class ConfiguracaoParser extends Component
         $this->textoExtraidoDaPagina = null;
     }
 
-    private function regrasDeValidacao(): array
+    public function rules(): array
     {
         return [
             'regexNomeCliente' => ['required', 'string', $this->regraRegexValido()],

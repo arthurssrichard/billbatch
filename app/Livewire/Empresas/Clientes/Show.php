@@ -5,25 +5,36 @@ namespace App\Livewire\Empresas\Clientes;
 use App\Enums\CanalCobranca;
 use App\Models\Cliente;
 use App\Models\Empresa;
+use App\Traits\ValidatesWithToast;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 class Show extends Component
 {
+    use ValidatesWithToast;
+
     public Empresa $empresa;
 
     public Cliente $cliente;
 
+    #[Validate('required', onUpdate: false)]
     public string $nome = '';
 
+    #[Validate('required', onUpdate: false)]
     public string $identificadorExterno = '';
 
+    #[Validate('required', onUpdate: false)]
     public ?string $grupo = null;
 
+    #[Validate('required', onUpdate: false)]
     public string $cnpj = '';
 
     public array $canaisEnvio = [];
 
+    #[Validate([
+        'contatos.*.endereco_email' => ['email', 'required'],
+    ], onUpdate: false)]
     public array $contatos = [];
 
     public function mount(Empresa $empresa, Cliente $cliente): void
@@ -44,41 +55,56 @@ class Show extends Component
 
         $this->contatos = $cliente->contatos()
             ->get()
-            ->map(fn ($contato) => ['id' => $contato->id, 'endereco_email' => $contato->endereco_email])
+            ->map(fn ($contato) => [
+                'id' => $contato->id,
+                'endereco_email' => $contato->endereco_email,
+            ])
             ->toArray();
     }
 
     public function adicionarContato(): void
     {
-        $this->contatos[] = ['id' => null, 'endereco_email' => ''];
+        $this->contatos[] = [
+            'id' => null,
+            'endereco_email' => '',
+        ];
     }
 
     public function removerContato(int $index): void
     {
         unset($this->contatos[$index]);
+
         $this->contatos = array_values($this->contatos);
     }
 
     public function salvarAlteracoes(): void
     {
-        $this->contatos = array_values(array_filter(
-            $this->contatos,
-            fn ($contato) => filled($contato['endereco_email']),
-        ));
-
-        $this->validate([
-            'contatos.*.endereco_email' => ['email'],
-        ]);
+        if (! $this->validateWithToast([
+            'nome' => 'nome',
+            'identificadorExterno' => 'identificador externo',
+            'grupo' => 'grupo',
+            'cnpj' => 'CNPJ',
+            'contatos\.\d+\.endereco_email' => 'e-mail',
+        ], 'Cliente')) {
+            return;
+        }
 
         $this->cliente->update([
             'nome' => $this->nome,
             'identificador_externo' => $this->identificadorExterno,
             'grupo' => $this->grupo,
             'cnpj' => $this->cnpj,
-            'canais_envio' => collect($this->canaisEnvio)->filter()->keys()->values()->toArray(),
+            'canais_envio' => collect($this->canaisEnvio)
+                ->filter()
+                ->keys()
+                ->values()
+                ->toArray(),
         ]);
 
-        $idsExistentes = collect($this->contatos)->pluck('id')->filter()->all();
+        $idsExistentes = collect($this->contatos)
+            ->pluck('id')
+            ->filter()
+            ->all();
 
         $this->cliente->contatos()
             ->whereNotIn('id', $idsExistentes)
@@ -92,16 +118,23 @@ class Show extends Component
             if ($contato['id']) {
                 $this->cliente->contatos()
                     ->where('id', $contato['id'])
-                    ->update(['endereco_email' => $contato['endereco_email']]);
+                    ->update([
+                        'endereco_email' => $contato['endereco_email'],
+                    ]);
             } else {
-                $this->cliente->contatos()->create(['endereco_email' => $contato['endereco_email']]);
+                $this->cliente->contatos()->create([
+                    'endereco_email' => $contato['endereco_email'],
+                ]);
             }
         }
 
-        // recarrega os contatos já com ids definidos, pra não perder o vínculo se salvar de novo
+        // Recarrega os contatos já com os IDs definidos.
         $this->contatos = $this->cliente->contatos()
             ->get()
-            ->map(fn ($contato) => ['id' => $contato->id, 'endereco_email' => $contato->endereco_email])
+            ->map(fn ($contato) => [
+                'id' => $contato->id,
+                'endereco_email' => $contato->endereco_email,
+            ])
             ->toArray();
     }
 
@@ -117,6 +150,9 @@ class Show extends Component
 
     public function render()
     {
-        return view('livewire.empresas.clientes.show')->layout('components.layout', ['title' => $this->cliente->nome]);
+        return view('livewire.empresas.clientes.show')
+            ->layout('components.layout', [
+                'title' => $this->cliente->nome,
+            ]);
     }
 }

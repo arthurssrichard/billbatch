@@ -6,13 +6,20 @@ use App\Models\Boleto;
 use App\Models\Cliente;
 use App\Models\Empresa;
 use App\Services\SubstituirPlaceholdersService;
+use App\Traits\ValidatesWithToast;
 use Livewire\Attributes\Computed;
+use Livewire\Attributes\Validate;
 use Livewire\Component;
 
 class ModelosMensagem extends Component
 {
+    use ValidatesWithToast;
+
     public Empresa $empresa;
 
+    #[Validate([
+        'modelos.*.assunto' => ['required'],
+    ], onUpdate: false)]
     public array $modelos = [];
 
     public function mount(Empresa $empresa): void
@@ -33,6 +40,13 @@ class ModelosMensagem extends Component
 
     public function salvar(string $tipo): void
     {
+        if (! $this->validateWithToast([
+            'modelos\.\d+\.assunto' => 'assunto',
+            'modelos\.\d+\.corpo' => 'corpo',
+        ], 'Modelo de mensagem')) {
+            return;
+        }
+
         $dados = $this->modelos[$tipo];
 
         $this->empresa->modeloMensagemCobrancas()
