@@ -17,23 +17,35 @@ document.addEventListener('alpine:init', () => {
         slides: [
             {
                 titulo: 'Bem-vindo à sua empresa de teste',
-                texto: 'Criamos uma empresa fictícia com clientes, contatos e boletos já carregados, para você explorar o sistema sem precisar configurar nada.',
+                texto: 'Criamos uma empresa fictícia com clientes e contatos já cadastrados para que você possa experimentar o fluxo completo de cobrança sem precisar configurar nada.'
             },
             {
-                titulo: 'Veja seus clientes',
-                texto: 'Em "Clientes" você encontra todos os clientes cadastrados, seus grupos e canais de envio habilitados.',
+                titulo: 'O que são os grupos?',
+                texto: 'Os clientes são organizados em grupos de cobrança. Cada grupo representa uma combinação de regras usada para identificar um conjunto de boletos. Neste exemplo, "150_10" significa boletos de R$ 150 com vencimento no dia 10.'
             },
             {
-                titulo: 'Gere um novo envio',
-                texto: 'Em "Envios → Novo envio" você pode simular o processamento de um lote de boletos em PDF, do upload até o envio por e-mail.',
+                titulo: 'Simule um lote de boletos',
+                texto: 'Acesse "Envios → Novo envio" e clique em "Simular envio de boletos". O sistema gera um PDF fictício por grupo, reunindo o boleto de cada cliente daquele grupo em um único arquivo — como se fosse o lote que o banco te manda todo mês.'
             },
             {
-                titulo: 'Acompanhe o status',
-                texto: 'Cada boleto mostra se foi enviado e se está pago, com os detalhes de cada cobrança disponíveis a um clique.',
+                titulo: 'Cada boleto encontra seu cliente',
+                texto: 'Ao clicar em "Processar", cada PDF é dividido página por página, o texto é extraído e o sistema identifica automaticamente o cliente correspondente — sem precisar abrir ou nomear os arquivos manualmente.'
             },
             {
-                titulo: 'Ajuste o reconhecimento de boletos',
-                texto: 'Em "Configuração do parser" você pode alterar os padrões (regex) usados para identificar cliente e código de barras em cada PDF.',
+                titulo: 'Revise e confirme o envio',
+                texto: 'Antes de qualquer e-mail sair, você vê a lista de boletos processados e para quais contatos cada um será enviado. Ao confirmar, cada boleto gera uma cobrança e entra na fila de envio.'
+            },
+            {
+                titulo: 'Os envios acontecem aos poucos',
+                texto: 'Os e-mails não saem todos de uma vez: o intervalo entre cada envio é calculado a partir do limite por hora da empresa, evitando estourar a cota do provedor ou ser marcado como spam.'
+            },
+            {
+                titulo: 'Acompanhe tudo em tempo real',
+                texto: 'Volte para "Envios" e veja o status de cada boleto mudando sozinho — pendente, enviando, enviado — enquanto a fila processa em segundo plano.'
+            },
+            {
+                titulo: 'De dias de trabalho para minutos',
+                texto: 'Separar boletos, identificar clientes e enviar um por um manualmente levava dias (case real). Aqui, o mesmo processo roda em minutos — o trabalho humano fica em iniciar, revisar e acompanhar.'
             },
         ],
 
