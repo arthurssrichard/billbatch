@@ -91,7 +91,7 @@
                     <button
                         type="button"
                         @click="irParaGuia()"
-                        class="bg-amber-600 hover:bg-amber-500 text-mist-950 font-sans font-medium text-sm px-4 py-2 rounded-sm transition-colors"
+                        class="bg-amber-600 hover:bg-amber-500 text-mist-950 font-sans font-medium text-md px-4 py-2 rounded-sm transition-colors"
                     >
                         Prosseguir para o guia →
                     </button>
@@ -103,7 +103,7 @@
                 <template x-for="(slide, i) in slides" :key="i">
                     <div x-show="slideAtual === i">
                         <h2 class="font-sans font-semibold text-mist-50 mb-2" x-text="slide.titulo"></h2>
-                        <p class="text-sm text-mist-400 leading-relaxed min-h-20" x-text="slide.texto"></p>
+                        <p class="text-md font-sans text-mist-400 leading-relaxed min-h-20" x-text="slide.texto"></p>
                     </div>
                 </template>
 
