@@ -24,6 +24,18 @@ services:
             php artisan storage:link &&
             php artisan migrate --force &&
             apache2-foreground"
+        labels:
+      - "traefik.enable=true"
+      - "traefik.docker.network=proxy"
+
+      - "traefik.http.routers.billbatch.rule=Host(`billbatch.arthurssrichard.com`)"
+      - "traefik.http.routers.billbatch.entrypoints=websecure"
+      - "traefik.http.routers.billbatch.tls=true"
+      - "traefik.http.routers.billbatch.service=billbatch"
+      - "traefik.http.routers.billbatch.middlewares=security-headers@file,compress@file"
+
+      - "traefik.http.services.billbatch.loadbalancer.server.port=80"
+
   mysql:
     container_name: mysql
     image: mysql:8.0
@@ -107,8 +119,8 @@ services:
 # ------------------------------------------------------------
 
 networks:
+  proxy:
+    external: true
   rede_interna:
     driver: bridge
-    internal: true
-  proxy:
-    driver: bridge
+    
