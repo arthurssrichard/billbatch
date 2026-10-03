@@ -17,6 +17,9 @@ jobs:
       - name: Fix permissions for container user
         run: sudo chown -R 1000:1000 .
 
+      - name: Criar rede externa 'proxy' (simula infraestrutura do Traefik em produção)
+        run: docker network create proxy || true
+
       - run: docker compose up -d mysql
       - run: docker compose run --rm billbatch composer install
       - run: docker compose run --rm billbatch npm run build
