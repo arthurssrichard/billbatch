@@ -24,7 +24,7 @@ services:
             php artisan storage:link &&
             php artisan migrate --force &&
             apache2-foreground"
-        labels:
+    labels:
       - "traefik.enable=true"
       - "traefik.docker.network=proxy"
 
